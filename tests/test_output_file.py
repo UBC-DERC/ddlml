@@ -5,8 +5,23 @@ from pathlib import Path
 
 import yaml
 
-EXAMPLE = Path("examples/data_definitions/dairymodel.yaml")
+from ddlml.cli import main
+
+EXAMPLE = "examples/data_definitions/dairymodel.yaml"
 GOLDEN = Path("tests/golden/output.yaml")
+
+
+def test_simple_example(tmp_path):
+    output = tmp_path / "output.yaml"
+    code = main(
+        [
+            "examples/simple_example/database.yaml",
+            "--output",
+            str(output),
+        ]
+    )
+    assert code == 0
+    assert output.exists()
 
 
 def test_output_yaml_matches_golden(tmp_path):
