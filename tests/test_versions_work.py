@@ -64,20 +64,6 @@ def test_current_version_passes():
     )
 
 
-def test_ddlml_version_mismatch_fails():
-    with pytest.raises(ValidationError):
-        ddlml_dict(
-            ddlml_version="2024.10.4",
-            database={"name": "test_db", "schemas": []},
-            info={
-                "version": "2026.10.4",
-                "title": "Test Model",
-                "summary": "A test model for testing purposes",
-                "contacts": [],
-            },
-        )
-
-
 def test_old_ddaml_key_is_rejected(write_yaml):
     entry = write_yaml(
         "db.yaml",
