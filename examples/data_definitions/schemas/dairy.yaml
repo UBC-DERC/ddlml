@@ -2,3 +2,4 @@
   comment: The main dairy schema, with all data structures used for the farm.
   tables:
     - $ref: dairytables
+  x-example: example
