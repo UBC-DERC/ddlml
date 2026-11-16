@@ -62,7 +62,7 @@ def test_current_version_passes():
     )
 
 
-def test_ddaml_version_mismatch_fails():
+def test_ddlml_version_mismatch_fails():
     with pytest.raises(ValidationError):
         ddlml_dict(
             ddlml_version="2024.10.4",

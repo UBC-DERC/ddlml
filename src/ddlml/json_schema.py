@@ -1,6 +1,6 @@
 """Generate the JSON Schema for ddlml documents from the Pydantic models.
 
-The schema is derived from the :class:`~data_model.object_classes.ddlml_dict`, so it
+The schema is derived from the :class:`~ddlml.object_classes.ddlml_dict`, so it
 always matches the models used for validation. It is published alongside the
 documentation at :data:`SCHEMA_URL` (see ``hooks/json_schema.py``, which runs
 this on every ``mkdocs build``/``serve``).

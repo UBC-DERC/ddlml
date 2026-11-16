@@ -1,4 +1,4 @@
-"""Tests for the data-model command-line entry point."""
+"""Tests for the ddlml command-line entry point."""
 
 import pytest
 import yaml

@@ -137,18 +137,18 @@ Here is an example of a license defined by a license file at a URL the user mana
 
 ??? example "DDLML Local-ish MIT License Example"
     ```yaml
-        license:
-          name: MIT License
-          url: https://example.com/LICENSE.md
+    license:
+      name: MIT License
+      url: https://example.com/LICENSE.md
     ```
 
 Here the license is defined by the [SPDX License](https://spdx.org/licenses/) naming convention:
 
 ??? example "DDLML SPDX Example"
     ```yaml
-        license:
-          name: Creative Commons v1.0
-          identifier: CC-BY-1.0
+    license:
+      name: Creative Commons v1.0
+      identifier: CC-BY-1.0
     ```
 
 ### Database
@@ -227,10 +227,10 @@ A schema can contain zero or more tables.
 
 #### Table Example
 
-Here we define a table with two columns, `cadid` and `cowschemeid`. The `cadid` table is a `$ref` reference, which means the full definition is in the file `columns/cadid.yaml`, where the path is relative to the calling file (not the root of the DDLML definition).
+Here we define a table with two columns, `cadid` and `cowschemeid`. The `cadid` column is a `$ref` reference, which means the full definition is in the file `columns/cadid.yaml`, where the path is relative to the calling file (not the root of the DDLML definition).
 
-??? example "DDLML Table Example"
-    ```yaml
+??? example "DDLML Table Example with $ref tag"
+    ```yaml hl_lines="14"
     - name: cows
       type: BASE TABLE
       schema: dairy
@@ -335,7 +335,7 @@ We can place any number of indices on a column, or set of columns. Here we creat
         columns:
         - buildingid
       constraints:
-      - name: instrumantinstanceid_pk
+      - name: instrumentinstanceid_pk
         type: PRIMARY KEY
         ddl: PRIMARY KEY (instrumentinstanceid)
         columns:
@@ -467,7 +467,7 @@ There is currently no mechanism to validate these extensions, but they are passe
 ### Extension Examples
 
 One of the first uses we've found for the extensions is linking to external ontologies. For example, using
-the extension to link to a [schema.org/identfier](https://schema.org/identifier) definition:
+the extension to link to a [schema.org/identifier](https://schema.org/identifier) definition:
 
 ??? example "DDLML Example"
     ```yaml
