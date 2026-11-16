@@ -40,7 +40,7 @@ The `ddlml_version` must be an accepted version of the ddlml specification. This
     info:
       title: Simple Example
       summary: A data model for a very simple explanation
-      version: 1.0.0
+      version: "1.0.0"
       license:
         name: CC0-1.0
         url: https://creativecommons.org/publicdomain/zero/1.0/
@@ -62,24 +62,19 @@ These fields are similar to the fields defined in the [OpenAPI v3.2.1 Specificat
 | Field name | Type | Description |
 | --- | --- | --- |
 | title | str | REQUIRED. The title of the data model (different from the database name). This is a formal title for the document. |
-| summary | str | A short summary of the database model. |
-| description | str | A description of the data model. [CommonMark](https://commonmark.org/) syntax MAY be used for rich text representation. |
+| summary | str | A short summary of the data model. [CommonMark](https://commonmark.org/) syntax MAY be used for rich text representation. |
 | contacts | [Contact Object](#contacts) | The contact information for the metadata and data model maintainer. |
 | license | [License Object](#license) | The license information for the data model and structured repository associated with it. |
 | version | str | REQUIRED. The version of the DDLML document (which is distinct from the DDLML Specification version). |
 
 #### Info Example
 
-Here is a simple example of an info block for a project building an open data resource to manage zebrafish genetics data:
+Here is a simple example of an info block for a project building an open data resource to manage zebrafish genetics data. Note that version number "0.1" is quoted, so that the YAML parser will read it as a string.
 
 ??? example "DDLML example"
     ```yaml
     title: zebrafishdb
     summary: A public database for managing information about zebrafish genetics
-    description: >-
-      This data resource was developed by researchers at SuperCool University of Western State to
-      support ongoing research as part of the [Example Project](http://example.com/exampleproject)
-      into interactions between epigenetics and genetics in zebrafish and other model organisms.
     contacts:
       - name: Oksana Honchar
         url: https://example.com/oksanahonchar
@@ -90,7 +85,7 @@ Here is a simple example of an info block for a project building an open data re
     license:
       name: MIT License
       url: https://example.com/LICENSE.md
-    version: 0.1
+    version: "0.1"
     ```
 
 ### Contacts
@@ -140,7 +135,7 @@ A field to support the discovery and application of licensing to any data model 
 
 Here is an example of a license defined by a license file at a URL the user manages (you could replace the URL with your own License file):
 
-??? example "DDLML Example"
+??? example "DDLML Local-ish MIT License Example"
     ```yaml
         license:
           name: MIT License
@@ -149,10 +144,10 @@ Here is an example of a license defined by a license file at a URL the user mana
 
 Here the license is defined by the [SPDX License](https://spdx.org/licenses/) naming convention:
 
-??? example "DDLML Example"
+??? example "DDLML SPDX Example"
     ```yaml
         license:
-          name: MIT License
+          name: Creative Commons v1.0
           identifier: CC-BY-1.0
     ```
 
@@ -188,7 +183,7 @@ A database object may be very simple. In initial development it may be enough to
       encoding: UTF8
     ```
 
-### Schema
+### Schemas
 
 The schema is a conceptual grouping of tables, either around a particular data source, permission set or conceptual model.
 
@@ -204,7 +199,7 @@ A schema can contain zero or more tables.
 
 ??? example "DDLML Example"
     ```yaml
-    schema:
+    schemas:
     - name: firstschema
       comment: This is a schema with no tables.
     - name: secondschema
@@ -213,6 +208,9 @@ A schema can contain zero or more tables.
       - name: onlytable
         type: BASE TABLE
         comment: The only table in the secondschema schema.
+        columns:
+        - name: onecolumn
+          type: nchar(1)
     ```
 
 ### Table
@@ -229,7 +227,7 @@ A schema can contain zero or more tables.
 
 #### Table Example
 
-Here we define a table with two columns, `cadid` and `cowschemeid`. The `cowid` table is a `$ref` reference, which means the full definition is in the file `columns/cadid.yaml`, where the path is relative to the calling file (not the root of the DDLML definition).
+Here we define a table with two columns, `cadid` and `cowschemeid`. The `cadid` table is a `$ref` reference, which means the full definition is in the file `columns/cadid.yaml`, where the path is relative to the calling file (not the root of the DDLML definition).
 
 ??? example "DDLML Table Example"
     ```yaml
@@ -278,7 +276,7 @@ Here we show the example file for `cadid.yaml` referenced above in the [table ex
 
 We can look at a more complete example of a column definition, for `datecreated`, which can be used across multiple tables, and has references to PROV-O and `schema` standards:
 
-???example "DDLML datecreated Example"
+??? example "DDLML datecreated Example"
     ```yaml
     - name: datecreated
       comment: >-
@@ -298,7 +296,7 @@ We can look at a more complete example of a column definition, for `datecreated`
         relation: exactMatch
     ```
 
-### Index
+### Indexes
 
 | Field name | Type | Description |
 | --- | --- | --- |
@@ -310,7 +308,7 @@ We can look at a more complete example of a column definition, for `datecreated`
 
 #### Index Example
 
-We can place any number of indices on a column, or set of columns. Here we create a table with a two column b-tree index:
+We can place any number of indices on a column, or set of columns. Here we create a table with a hash index on `buildingid`, a value we expect to repeat frequently:
 
 ??? example "DDLML HASH Index Example"
     ```yaml hl_lines="16-22"
@@ -329,20 +327,19 @@ We can place any number of indices on a column, or set of columns. Here we creat
           comment: A description of the instrument placement.
         - $ref: columns/datecreated.yaml
         - $ref: columns/datemodified.yaml
-      index:
+      indexes:
       - name: instrumentsinbuilding_idx
-        type: btree
-        comment: Using a b-tree index to speed up instrument searches by building.
+        type: hash
+        comment: Using a hash index to speed up instrument searches by building.
         ddl: "CREATE INDEX instrumentsinbuilding_idx ON instrumentinstance USING HASH(buildingid);"
         columns:
         - buildingid
       constraints:
-      - name: instrumantinstance_pk
+      - name: instrumantinstanceid_pk
         type: PRIMARY KEY
-        ddl: PRIMARY KEY (instrumentid,location)
+        ddl: PRIMARY KEY (instrumentinstanceid)
         columns:
-        - instrumentid
-        - location
+        - instrumentinstanceid
       - name: instrumentinbuilding_fk
         type: FOREIGN KEY
         columns:
@@ -373,11 +370,13 @@ We could add a spatial index on the `location` column in the previous example us
 
 ??? example "DDLML GIST Index Example"
     ```yaml
-    index:
+    indexes:
     - name: instrumentlocation_idx
       type: GIST
       comment: Spatial index on the instrument location.
       ddl: CREATE INDEX instrumentlocation_idx ON instrumentinstance USING GIST(location)
+      columns:
+      - location
     ```
 
 ### Constraint
@@ -404,7 +403,7 @@ We may want to use an internal foreign key within our table, in this case we def
       columns:
       - damid
       references:
-      - table: cows
+        table: cows
         columns:
         - cadid
         on_update: CASCADE
@@ -448,7 +447,7 @@ For a table with an internal foreign key constraint we may want to reference our
       columns:
       - damid
       references:
-      - table: cows
+        table: cows
         columns:
         - cadid
         on_update: CASCADE
@@ -468,9 +467,9 @@ There is currently no mechanism to validate these extensions, but they are passe
 ### Extension Examples
 
 One of the first uses we've found for the extensions is linking to external ontologies. For example, using
-the extension to link to a [schema.org/Identfier](https://schema.org/identifier) definition:
+the extension to link to a [schema.org/identfier](https://schema.org/identifier) definition:
 
-??? example "DDAML Example"
+??? example "DDLML Example"
     ```yaml
     x-reference:
       - ontology: schema.org
