@@ -40,7 +40,7 @@ A fully open data model based on best practices across industries and academic f
     main.py    # The main production script to turn the 
                # various YAML files into code.
     src/
-        data_model/  # The folder for the `data_model` python package.
+        ddlml/  # The folder for the `ddlml` python package.
     docs/            # Documentation pages.
     assets/          # Images and supporting data for documentation and testing.
     tests/           # PyTest testing modules

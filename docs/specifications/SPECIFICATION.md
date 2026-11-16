@@ -2,7 +2,7 @@
 
 Date: November 16, 2026
 
-This document serves to define the specifications for the DDLML (Database Description Language Markup Language) format that will be used to generate valid (Postgres) data description language (DDL) structure through the [`data_model`](https://github.com/UBC-DERC/data_model) and the [`ddl_builder`](https://github.com/UBC-DERC/ddl_builder) Python packages. The goal is to develop a human readable document format that can be processed by a Python script and transformed into usable SQL to work within a system in which atomic features of databases are required, but schema or data model specifications may change over time.
+This document serves to define the specifications for the DDLML (Database Description Language Markup Language) format that will be used to generate valid (Postgres) data description language (DDL) structure through the [`ddlml`](https://github.com/UBC-DERC/ddlml) and the [`ddl_builder`](https://github.com/UBC-DERC/ddl_builder) Python packages. The goal is to develop a human readable document format that can be processed by a Python script and transformed into usable SQL to work within a system in which atomic features of databases are required, but schema or data model specifications may change over time.
 
 This format will attempt to mirror other existing schema, and is strongly influenced by [OpenAPI](https://spec.openapis.org/oas/latest.html).
 
@@ -143,6 +143,7 @@ The schema is a conceptual grouping of tables, either around a particular data s
 In the case where additional metadata helps explain an object, or works to enrich the object for future work, then the `^x-` extensions are intended to support this information collection and management within the DDLML specification.
 
 | Field Pattern | Type | Description |
+| ------------- | ---- | ----------- |
 | `^x-` | Any | An extension for [Tables](#table), [Columns](#column) and [Schema](#schema) only. These extensions may include additional objects named with the `x-` preface. For example `x-references`. These objects are exported to the final object, but are generally used to support metadata for the objects, and are not explicitly used for data management or DDL construction. |
 
 There is currently no mechanism to validate these extensions, but they are passed through to the validated output.

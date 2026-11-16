@@ -22,7 +22,7 @@ from .object_classes import ddlml_dict
 
 def _build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        prog="data-model",
+        prog="ddlml",
         description="Validate a YAML data model and write documentation and a composite YAML file.",
     )
     parser.add_argument("entry", help="Path to the database entry YAML file.")

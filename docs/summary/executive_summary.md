@@ -25,7 +25,7 @@ DERC will use this data to produce a high quality curated data resource. Curatio
 
 ```mermaid
 flowchart TD
-    data_model
+    ddlml
     ddl_builder
     DERC_Governance
     community@{ shape: cloud, label: "Community Engagement" }
@@ -36,7 +36,7 @@ flowchart TD
     education@{shape: docs, label: "Education\nMaterials" }
 
     subgraph datamodel
-    data_model --> ddl_builder
+    ddlml --> ddl_builder
     end
 
     ddl_builder --> dercpostgres
@@ -55,8 +55,8 @@ flowchart TD
     dercpostgrest --> publication
     dercpostgrest --> policy
     
-    DERC_Governance --> data_model
-    community --> data_model
+    DERC_Governance --> ddlml
+    community --> ddlml
 
     education --> community
     policy --> community
@@ -67,7 +67,7 @@ flowchart TD
 
 The following are tangible goals to be identified as components of project success:
 
-1. **[This Repository](https://github.com/UBC_DERC/data_model)** Data Model Development: The data model will be written in "plain text" YAML, with clear field comments, to be applied to a Postgres database. The data fields will:
+1. **[This Repository](https://github.com/UBC_DERC/ddlml)** Data Model Development: The data model will be written in "plain text" YAML, with clear field comments, to be applied to a Postgres database. The data fields will:
     1. Have clear contribution guidelines, to support expert engagement
     2. Be clearly commented
     3. Be linked to established concepts in animal science/dairy sciences or external concepts and standards (such as FOAF, schema.org or DarwinCore)

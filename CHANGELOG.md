@@ -77,7 +77,7 @@ and this project adheres to [Calendar Versioning](https://calver.org/) using a Y
 ### Added
 
 - **JSON Schema publication**: Auto-generated from Pydantic models and published to docs site
-  at `https://ubc-derc.github.io/data_model/schema.json`.
+  at `https://ubc-derc.github.io/ddlml/schema.json`.
 - **Schema documentation page** (`docs/api/schema.md`) with VS Code integration guide for
   editor autocompletion and validation.
 - **Pre-commit hook** for `ruff` and `ty` checks on `develop` and `main` branches (gitflow).
