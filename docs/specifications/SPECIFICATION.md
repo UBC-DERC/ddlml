@@ -20,6 +20,69 @@ The models and systems established as part of DDLML allow system developers to c
 
 Versioning will use a [CalVer](https://calver.org/) system, using a YYYY.M.D.MICRO format without padding. Breaking changes will be documented in the CHANGELOG, and end-of-support will be documented in the specifications and in the README.
 
+## File References (`$ref`)
+
+A `$ref` replaces an entry with the contents of another file or folder, so a
+model can be split across files and shared definitions (such as `datecreated`)
+written once.
+
+| Field name | Type | Description |
+| --- | --- | --- |
+| $ref | str | REQUIRED. A path to a YAML file or a folder of YAML files, relative to the file that contains the `$ref`. |
+
+A `$ref` tag is intended to hold only one object, not a list. In the current implementation only the first list element will be retained.
+
+A file referenced by `$ref` cannot itself begin with a `$ref` tag.
+
+### Where `$ref` may be used
+
+The `$ref` tag may be used for entries in `schemas`, `tables` and `columns`. At present a `$ref` can only be used if the parent object (`schema`) also uses a `$ref` object.  In part this is intended to help support the development of smaller, modular `yaml` structures, but may be problematic. Our goal is to address this limitation in the future.
+
+The current implementation assumes that any reference from `tables` must point to a directory (rather than a single file).
+
+### Resolving paths
+
+- The `$ref` is relative to the folder of the file containing the `$ref`, not the entry file or the working directory. Absolute paths are used as-is.
+- A folder loads every `*.yml` / `*.yaml` file in it, in alphabetical order.
+- A file loads its contents.
+- A missing target is an error.
+
+### Keys beside a `$ref`
+
+Keys with a `$ref` will be ignored. This is currently a limitation, for example, with external references, the meaning of a particular column or field will change depending on if it is a PRIMARY KEY or FOREIGN KEY. At present we do not support the differentiation of ontology references outside the `$ref` tag.
+
+### `$ref` Example
+
+Here is an example table with the `$ref` tag. Note that for this to work properly within a full database object the table itself must have been linked through a `$ref` tag.
+
+??? example "DDLML Table Example with $ref tag"
+    ```yaml hl_lines="14"
+    - name: cows
+      type: BASE TABLE
+      schema: dairy
+      comment: >-
+        The primary table for cow-related identification. This table should tie to any information about cows,
+        their locations, movement, treatments and, ultimately, datasets produced using the cows as primary data
+        elements.
+      x-reference:
+      - ontology: DCPO
+        term: dcpo:bovine
+        url: https://agroportal.eu/ontologies/DCPO/Bovine
+        relation: broadMatch
+      columns:
+        - $ref: columns/cadid.yaml
+        - name: cowschemeid
+          type: text
+          comment: >-
+            We clearly identify the scheme from which the cow ID is coming from. It is implied
+            that this is the Canadian data scheme, but if this data is used in synthesis work
+            it is important to identify the source.
+    ```
+
+### Differences from OpenAPI
+
+No `#/…` fragments (JSON Pointer) and no URLs; local paths only.
+
 ## Objects and Fields
 
 ### Fixed Fields
@@ -62,7 +125,8 @@ These fields are similar to the fields defined in the [OpenAPI v3.2.1 Specificat
 | Field name | Type | Description |
 | --- | --- | --- |
 | title | str | REQUIRED. The title of the data model (different from the database name). This is a formal title for the document. |
-| summary | str | A short summary of the data model. [CommonMark](https://commonmark.org/) syntax MAY be used for rich text representation. |
+| summary | str | A short summary of the data model. |
+| description | str| A longer description of the data model that can use [CommonMark](https://commonmark.org/) syntax for rich text representation. |
 | contacts | [Contact Object](#contacts) | The contact information for the metadata and data model maintainer. |
 | license | [License Object](#license) | The license information for the data model and structured repository associated with it. |
 | version | str | REQUIRED. The version of the DDLML document (which is distinct from the DDLML Specification version). |
