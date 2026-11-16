@@ -3,7 +3,15 @@
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
-and this project adheres to [Calendar Versioning](https://calver.org/) using a YYYY-MM model.
+and this project adheres to [Calendar Versioning](https://calver.org/) following [PEP 440](https://peps.python.org/pep-0440/) (all version numbers should resolve using `^\d{4}\.(?:[1-9]|1[0-2])\.(?:0|[1-9]\d*)(?:(?:a|b|rc)(?:0|[1-9]\d*))?(?:\.dev(?:0|[1-9]\d*))?$`).
+
+This supports the following PEP440 styles:
+
+* 2026.12.1
+* 2027.1.0.dev3
+* 2028.1.0a1
+
+NOTE: Some earlier versions of this software (in the changelogs and git-tags) may show non compliant CALVER versioning. We maintain them for transparency.
 
 ## [2026-11-alpha]
 
