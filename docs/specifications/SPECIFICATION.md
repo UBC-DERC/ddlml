@@ -1,12 +1,12 @@
 # DDLML Specification
 
-Date: October 26, 2026
+Date: November 16, 2026
 
 This document serves to define the specifications for the DDLML (Database Description Language Markup Language) format that will be used to generate valid (Postgres) data description language (DDL) structure through the [`data_model`](https://github.com/UBC-DERC/data_model) and the [`ddl_builder`](https://github.com/UBC-DERC/ddl_builder) Python packages. The goal is to develop a human readable document format that can be processed by a Python script and transformed into usable SQL to work within a system in which atomic features of databases are required, but schema or data model specifications may change over time.
 
 This format will attempt to mirror other existing schema, and is strongly influenced by [OpenAPI](https://spec.openapis.org/oas/latest.html).
 
-## Version 2026.10.5
+## Version 2026.11.12
 
 The key words “MUST”, “MUST NOT”, “REQUIRED”, “SHALL”, “SHALL NOT”, “SHOULD”, “SHOULD NOT”, “RECOMMENDED”, “NOT RECOMMENDED”, “MAY”, and “OPTIONAL” in this document are to be interpreted as described in [RFC2119](https://www.rfc-editor.org/info/rfc2119/).
 
