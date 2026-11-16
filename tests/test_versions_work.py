@@ -7,6 +7,8 @@ import pytest
 import yaml
 from pydantic import ValidationError
 
+from ddlml.load_database import load_database
+from ddlml.model_build import ModelValidationError
 from ddlml.object_classes import CURRENT_DDLML_VERSION, ddlml_dict
 
 # There are a few places where I've hardcoded the acceptable versions
@@ -74,3 +76,16 @@ def test_ddlml_version_mismatch_fails():
                 "contacts": [],
             },
         )
+
+
+def test_old_ddaml_key_is_rejected(write_yaml):
+    entry = write_yaml(
+        "db.yaml",
+        {
+            "ddaml_version": "2026.10.5",
+            "info": {"title": "Old", "version": "1.0.0"},
+            "database": {"name": "d"},
+        },
+    )
+    with pytest.raises(ModelValidationError, match="ddlml_version"):
+        load_database(str(entry))
