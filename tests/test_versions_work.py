@@ -1,7 +1,7 @@
 """Testing the construction of the ddlml object, and the use of the info_dict class"""
 
 import pytest
-from pydantic import ModelValidationError, ValidationError
+from pydantic import ValidationError
 
 from ddlml.object_classes import CURRENT_DDLML_VERSION, ddlml_dict
 
@@ -34,7 +34,7 @@ def test_current_version_passes():
 
 
 def test_ddaml_version_mismatch_fails():
-    with pytest.raises(ModelValidationError):
+    with pytest.raises(ValidationError):
         ddlml_dict(
             ddlml_version="2024.10.4",
             database={"name": "test_db", "schemas": []},
