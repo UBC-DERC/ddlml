@@ -117,7 +117,7 @@ Using the beta as an example:
     ```
 
 2. Set `version = "2026.12.0b1"` in `pyproject.toml`, then run `uv lock` so the lockfile matches.
-3. Add a `[2026.12.0b1]` entry with the date to the top of `CHANGELOG.md`, listing what was added, changed and removed since the last release.
+3. In `CHANGELOG.md`, rename the `[Unreleased]` heading to `[2026.12.0b1] - YYYY-MM-DD`, and start a new, empty `[Unreleased]` section above it. Changes are recorded under `[Unreleased]` as they are merged, so the list should already be complete.
 4. Check that everything passes: `uv run pytest`, `uv run ruff check .`, `uv run ruff format --check .`, `uv run ty check` and `uv run mkdocs build --strict`.
 5. Finish the release. This merges into `main` and `develop` and creates the tag `v2026.12.0b1`:
 

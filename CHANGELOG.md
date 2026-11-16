@@ -13,6 +13,90 @@ This supports the following PEP440 styles:
 
 NOTE: Some earlier versions of this software (in the changelogs and git-tags) may show non compliant CALVER versioning. We maintain them for transparency.
 
+## [Unreleased]
+
+Planned as `2026.12.0b1`, the first beta on PyPI. Specification version `2026.11.12`.
+
+### Migrating from `2026-11-alpha`
+
+Existing models need three changes before they validate:
+
+1. Rename the top-level key `ddaml_version` to `ddlml_version`.
+2. Set it to `2026.11.12`, the only supported specification version.
+3. In `info.license`, rename `full_name` to `name` and `licenseId` to `identifier`.
+   Give either `identifier` or `url`, not both.
+
+Code that imports the package changes from `data_model` to `ddlml` (for example
+`from ddlml.object_classes import DDL_Dict`), and the command changes from `data-model`
+to `ddlml`.
+
+### Added
+
+- **Specification version check.** `SUPPORTED_DDLML_VERSIONS` lists the specification
+  versions this release accepts (currently only `2026.11.12`), and
+  `CURRENT_DDLML_VERSION` is the newest. A document with any other `ddlml_version` is
+  rejected with a message listing the supported versions. The JSON Schema lists them as
+  an `enum`, so editors flag an unsupported version.
+- `info.description`: an optional longer description of the model, which may use
+  CommonMark.
+- A clear error for documents that still use the old `ddaml_version` key.
+- The CLI reports a missing entry file or invalid YAML on stderr with exit code 1, instead
+  of a traceback.
+- **Specification:** an example for every object (in collapsible blocks), a section on
+  `x-` extensions, and a "File References (`$ref`)" section describing how references
+  resolve and the current limits.
+- `CONTRIBUTING.md`: how specification and package versions differ, the steps for a new
+  specification version, the PEP 440 version scheme, git-flow branch and merge rules, and
+  the release steps.
+- Tests:
+  - every example entry file and the specification heading use the current
+    specification version;
+  - unsupported versions and the old `ddaml_version` key are rejected;
+  - `x-` keys pass through the CLI to the output;
+  - the `simple_example` quick start builds;
+  - a missing entry file and invalid YAML exit cleanly.
+
+### Changed
+
+- **Breaking: renamed from `data_model` / DDAML to `ddlml`.** "DDAML" is already the name
+  of another markup language. This covers:
+  - the package on PyPI (`data-model` → `ddlml`) and the import (`data_model` → `ddlml`);
+  - the command (`data-model` → `ddlml`);
+  - the document key (`ddaml_version` → `ddlml_version`);
+  - the models (`ddaml_dict` → `ddlml_dict`, `ddaml_info` → `ddlml_info`);
+  - the repository, documentation site and JSON Schema URL, now
+    `https://github.com/UBC-DERC/ddlml` and `https://ubc-derc.github.io/ddlml/schema.json`.
+- **Breaking:** the license fields now follow the OpenAPI License Object: `full_name` →
+  `name`, `licenseId` → `identifier`. `identifier` and `url` are mutually exclusive, and one
+  of them is required. The default license is `name: Default Copyright Applies`,
+  `identifier: LicenseRef-Proprietary`.
+- **Breaking:** `ddlml_version` must be a supported specification version (see Added).
+  Before, any string was accepted.
+- A contact may now omit `email`; before, a contact with no email failed validation.
+- The CHANGELOG and git tags use [PEP 440](https://peps.python.org/pep-0440/) CalVer
+  (e.g. `2026.12.0b1`, tagged `v2026.12.0b1`) instead of names like `2026-11-alpha`.
+- `Dockerfile`: runs `ddlml` directly and passes arguments through
+  (`docker run … ddlml <entry> --docs … --output …`), defaulting to `--help`. Before, it
+  always printed help. It now uses a pinned `uv` (0.13.8) and installs without
+  development dependencies.
+- The specification: fixed the version heading and date, the extensions table, typos and
+  links, and aligned the License, Contact and Info tables with the code.
+- Example models, example outputs, the golden file and the generated docs regenerated for
+  the new names, license fields and specification version.
+
+### Removed
+
+- Compiled `.pyc` files that had been committed.
+
+### Dependencies
+
+- Updated `pydantic` to 2.14.3 and `markdown` to 3.11.3, plus other lock-file updates.
+- Updated GitHub Actions (`setup-uv` 10.3.3, `codeql-action` 4.39.3) via Dependabot.
+
+### Contributors
+
+- Simon Goring
+
 ## [2026-11-alpha]
 
 ### Added
