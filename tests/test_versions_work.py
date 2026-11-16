@@ -4,6 +4,7 @@ import re
 from pathlib import Path
 
 import pytest
+import yaml
 from pydantic import ValidationError
 
 from ddlml.object_classes import CURRENT_DDLML_VERSION, ddlml_dict
@@ -16,6 +17,13 @@ EXAMPLE_ENTRIES = [
     REPO_ROOT / "examples/simple_example/database.yaml",
     REPO_ROOT / "examples/data_definitions/dairymodel.yaml",
 ]
+
+
+@pytest.mark.parametrize("entry", EXAMPLE_ENTRIES, ids=lambda p: p.parent.name)
+def test_example_entry_uses_current_version(entry):
+    """Check that the example entries use the current ddlml version."""
+    doc = yaml.safe_load(entry.read_text())
+    assert str(doc["ddlml_version"]) == CURRENT_DDLML_VERSION
 
 
 def test_specification_has_right_header():
