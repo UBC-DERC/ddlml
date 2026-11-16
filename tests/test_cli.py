@@ -30,7 +30,7 @@ def test_cli_success_writes_both_artifacts(tmp_path):
     assert out.exists()
     assert yaml.safe_load(out.read_text())["database"]["name"] == "dairymodel"
     assert docs.exists() and any(docs.iterdir())
-    #assert yaml.safe_load(out.read_text())["database"]["schemas"][0]["x-example"] == "example"
+    # assert yaml.safe_load(out.read_text())["database"]["schemas"][0]["x-example"] == "example"
 
 
 def test_cli_invalid_entry_exits_1_and_writes_nothing(tmp_path, write_yaml, capsys):
@@ -95,6 +95,7 @@ def test_cli_missing_output_exits_2(tmp_path, capsys):
     err = capsys.readouterr().err
     assert "the following arguments are required: -o/--output" in err
     assert not any(tmp_path.iterdir()) or list(tmp_path.iterdir()) == [entry]
+
 
 def test_cli_missing_entry_exits_1_without_traceback(tmp_path, capsys):
     out = tmp_path / "output.yaml"
