@@ -10,30 +10,34 @@
 
 This project generates a valid YAML file to help manage the development and evolution of SQL data models. It supports the creation of a Postgres database with extensions, schemas, tables, columns, indexes and constraints. A user will create a set of YAML files representing the database, organized within folders, and the script will validate these files and generate linked markdown documentation for the user. The documentation is structured such that it can be easily placed into an existing `mkdocs` project.
 
-This repository contains an example `yaml` data representation in the `examples` folder, based on early prototyping of the data model for the [UBC Dairy Education and Research Center](https://dairycentre.landfood.ubc.ca/).  The `yaml` formatting follows the example used by [`tabls`](https://github.com/k1Low/tbls) elsewhere, with an added directory structuring to make individual tables easier to process, modify, validate and document. Structurally we aim to borrow aspects of `tabls` and the [OpenAPI project](https://www.openapis.org/). Both of which heavily influenced our thinking and design philosophies.
+This repository contains an example `yaml` data representation in the `examples` folder, based on early prototyping of the data model for the [UBC Dairy Education and Research Center](https://dairycentre.landfood.ubc.ca/).  The `yaml` formatting follows the example used by [`tbls`](https://github.com/k1Low/tbls) elsewhere, with an added directory structuring to make individual tables easier to process, modify, validate and document. Structurally we aim to borrow aspects of `tabls` and the [OpenAPI project](https://www.openapis.org/). Both of which heavily influenced our thinking and design philosophies.
 
 ## Optimal Design Flow
-
-```mermaid
-flowchart LR
-  uc@{ label: "User Consultation" }
-  dm@{ label: "Data Model\n(ddlml)" }
-  val@{ label: "Validation\n(ddlml)" }
-  ddl@{ label: "Database DDL\n(ddl_model)" }
-uc -- implementation --> dm
-dm -- continuous integration --> val
-dm -- database creation --> ddl
-ddl -- ongoing consultation --> uc
-
-click uc "https://ubc-derc.github.io/ddlml/admin/governance/" "Data Governance"
-click dm "https://ubc-derc.github.io/ddlml/database/" "UBC DERC Database Documentation"
-click val "https://github.com/UBC-DERC/ddlml" "ddlml validator"
-click ddl "https://github.com/UBC-DERC/ddl_builder" "DDL_Builder Repository"
-```
 
 Design should always begin with user consultation. This consultative process can help develop ideas for which tables, columns or relationships are critical for the data model. Data model development is iterative, and so we developed this tool to support the process through the generation of "live" documentation that can run from plain text files and render to web-readable outputs that can be examined by all interested parties.
 
 ## Installing this Package
+
+### Using `pip`
+
+```bash
+pip install ddlml
+```
+
+### Using `uv`
+
+```bash
+uv add ddlml
+uv add ddlml[docs] # If you want to use ``mkdocs serve`` for local documentation.
+```
+
+### Using `uvx`
+
+```bash
+uvx ddlml --help
+```
+
+### From Source Code
 
 To install from this GitHub repository, either install using a graphical tool such as GitKraken or GitHub Desktop, or install from the console using:
 
@@ -47,20 +51,24 @@ This assumes you have the [`uv`](https://docs.astral.sh/uv/getting-started/insta
 
 ## How to Use this Repository
 
-Once installed, the `ddlml` command validates a model and writes both the
-composite YAML artifact and the MkDocs documentation:
+The current [DDLML specification](https://ubc-derc.github.io/ddlml/specifications/SPECIFICATION/) can be found in the [package documentation](https://ubc-derc.github.io/ddlml).
+
+Once installed, the `ddlml` command validates a model and writes both the composite YAML artifact and the MkDocs documentation:
 
 ```bash
+# With UV
 uv run ddlml <path/to/entry.yaml> --docs <docs-output-dir> --output <composite.yaml>
+# With pip
+ddlml <path/to/entry.yaml> --docs <docs-output-dir> --output <composite.yaml>
 ```
 
-For the example model bundled in this repository:
+For the example model bundled in this repository (using the `pip` install):
 
 ```bash
 ddlml examples/data_definitions/dairymodel.yaml --docs docs --output output.yaml
 ```
 
-The `examples/data_definitions/` folder is **example input** — point the tool at the entry file of any directory of definitions.
+The `examples/data_definitions/` folder is **example input** with a root database definition at [`dairymodel.yaml`](https://github.com/UBC-DERC/ddlml/blob/main/examples/data_definitions/dairymodel.yaml). A simple database example also exists at [`examples/simple_example`](https://github.com/UBC-DERC/ddlml/tree/main/examples/simple_example).
 
 Validation runs in two phases:
 
@@ -90,14 +98,23 @@ The database itself is defined by a folder structure, modeled after PostgreSQL d
 In `examples/simple_example` we define a database file as [`database.yaml`](https://github.com/UBC-DERC/ddlml/blob/main/examples/simple_example/database.yaml) with the text:
 
 ```yaml
-- name: dairymodel
+ddlml_version: 2026.11.12
+info:
+  title: Simple Example
+  summary: A data model for a very simple explanation
+  version: 1.0.0
+  license:
+    name: CC0-1.0
+    url: https://creativecommons.org/publicdomain/zero/1.0/
+  contacts:
+    - name: Simple Example Team
+      email: simple@example.com
+database:
+  name: simplemodel
   schemas:
-    - name: dairy
+    - name: public
       comment: |
-        The main dairy schema, with all data structures used for the farm.
-    - name: apps
-      comment: |
-        The schema used for application specific tables, views and materialized views.
+        The public (default) schema.
 ```
 
 If we run:
@@ -113,12 +130,31 @@ We will expect to see that we have a file called [`output.yaml`](https://github.
 We can use references to sub-folders with the `$ref` tag, to point to folder content for more complex examples, as in our example within [`examples/data_definitions`](https://github.com/UBC-DERC/ddlml/blob/main/examples/data_definitions/)
 
 ```yaml
-- name: dairymodel
+ddlml_version: 2026.11.12
+info:
+  title: Dairy Model
+  summary: A data model for dairy farm management
+  version: 1.0.0
+  license:
+    name: CC0-1.0
+    url: https://creativecommons.org/publicdomain/zero/1.0/
+  contacts:
+    - name: Dairy Model Team
+      email: dairy@example.com
+database:
+  name: dairymodel
   schemas:
     - $ref: schemas/dairy.yaml
+    - $ref: schemas/apps.yaml
+  extensions:
+    - postgis
+    - pg_stat_monitor
+    - pg_trgm
+  locale: en_CA
+  encoding: UTF8
 ```
 
-Using the `$ref` tag also allows us to re-use certain content, for example, columns for understanding data creation dates and data modification dated.
+Using the `$ref` tag also allows us to re-use certain content, for example, columns for understanding data creation and modification dates.
 
 The `dairymodel.yaml` file defines elements of a preliminary design for a dairy farm database. This includes pointers to particular database extensions, schema definitions, and other elements that are required to define a database.
 
@@ -136,7 +172,7 @@ We can see a database structure with nested schema and `tables`. Individual file
   - name: constraintname
     comment: |
         Some example primary key.
-    type: one of [PRIMARY KEY, REFERENCES, UNIQUE, CHECK]
+    type: one of [PRIMARY KEY, FOREIGN KEY, UNIQUE, CHECK]
     ddl: PRIMARY KEY (columnname, columnname)   # authoritative SQL for this constraint
     columns:                                     # the constraint's OWN (local) columns
     - columnname
@@ -148,10 +184,10 @@ We can see a database structure with nested schema and `tables`. Individual file
     ddl: FOREIGN KEY (localcolumn) REFERENCES othertable (targetcolumn) ON UPDATE CASCADE
     columns:                                     # local column(s) the FK is defined on
     - localcolumn
-    references:                                  # only REFERENCES may carry a `references`
+    references:                                  # only FOREIGN KEY may carry a `references`
       schema: dairy                              # optional; defaults to the owning table's schema
-      table: othertable                          # optional; defaults to the owning table (self-FK)
-      columns:                                   # the REFERENCED column(s) in the target table
+      table: othertable                          # REQUIRED: May point to itself.
+      columns:                                   # the referenced column(s) in the target table
       - targetcolumn
   indexes:
   - name: indexname
@@ -165,7 +201,7 @@ We can see a database structure with nested schema and `tables`. Individual file
 
 The structured fields exist to help non-SQL users and to let the
 tool validate references: a constraint's `columns` must exist in its own table,
-and a `references` block (allowed only on `REFERENCES`) must point at an
+and a `references` block (allowed only on `FOREIGN KEY`) must point at an
 existing `(schema, table)` whose `columns` exist. When `schema` is omitted from a `references` block it will default to the owning schema.
 
 From these sets of yaml files we can build both documentation using `mkdocs` (in this repository) and we can build the actual SQL DDL for the database (using the [`ddl_builder`](https://github.com/UBC-DERC/ddl_builder) package). This structure allows us to clearly document the development of any database and all its various components.

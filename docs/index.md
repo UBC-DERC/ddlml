@@ -1,4 +1,4 @@
-# The DDL Markdown Language
+# The DDL Markup Language
 
 DDLML was developed as part of an ongoing project to help improve data governance within the
 Dairy Education and Research Center (DERC) at the University of British Columbia. Data collection
