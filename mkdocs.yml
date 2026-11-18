@@ -4,7 +4,7 @@ site_description: |
   Documentation and guidance for building DDL models using YAML, including specifications,
   examples and Python packaging for validation and documentation. This tool is intended to
   support the development of data models, particularly in the context of research data
-  management where a high priority is placed on decision making and repoducibility.
+  management where a high priority is placed on decision making and reproducibility.
 site_author: Simon Goring
 copyright: '2026'
 site_url: https://ubc-derc.github.io/ddlml/
@@ -19,7 +19,7 @@ nav:
     - CLI Usage: 'api/cli.md'
     - Object Classes: 'api/object_classes.md'
     - File Loading: 'api/load_files.md'
-    - Databse Creation: 'api/load_database.md'
+    - Database Creation: 'api/load_database.md'
     - Schema Creation: 'api/load_schema.md'
     - Table Creation: 'api/load_tables.md'
     - Column Creation: 'api/load_columns.md'

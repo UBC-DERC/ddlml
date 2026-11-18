@@ -1,8 +1,8 @@
 [![ci](https://github.com/UBC-DERC/ddlml/actions/workflows/ci.yml/badge.svg)](https://github.com/UBC-DERC/ddlml/actions/workflows/ci.yml) [![codeQL](https://github.com/UBC-DERC/ddlml/actions/workflows/codeql.yml/badge.svg)](https://github.com/UBC-DERC/ddlml/actions/workflows/codeql.yml)
 
-[![lifecycle](https://img.shields.io/badge/lifecycle-alpha-orange.svg)]()
+[![lifecycle](https://img.shields.io/badge/lifecycle-beta-orange.svg)]()
 
-[![](https://img.shields.io/badge/MIT-green?style=for-the-badge)](https://github.com/UBC-DERC/ddlml/blob/main/LICENSE.md)
+[![](https://img.shields.io/badge/License-MIT-green.svg)](https://github.com/UBC-DERC/ddlml/blob/main/LICENSE.md)
 
 [![CalVer - 2026.10.0a1](https://img.shields.io/badge/calver-2026.10.0a1-22bfda.svg)](https://calver.org/)
 
@@ -22,13 +22,14 @@ Design should always begin with user consultation. This consultative process can
 
 ```bash
 pip install ddlml
+pip install "ddlml[docs]" # If you want to use ``mkdocs serve`` for local documentation.
 ```
 
 ### Using `uv`
 
 ```bash
 uv add ddlml
-uv add ddlml[docs] # If you want to use ``mkdocs serve`` for local documentation.
+uv add "ddlml[docs]" # If you want to use ``mkdocs serve`` for local documentation.
 ```
 
 ### Using `uvx`

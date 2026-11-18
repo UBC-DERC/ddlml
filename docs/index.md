@@ -5,8 +5,8 @@ Dairy Education and Research Center (DERC) at the University of British Columbia
 at DERC includes information and knowledge from ongoing farm operations, but also from research
 projects with specific data needs.
 
-Our goal with this project was to develop a toolkit to supports data governance across a wide
-range of techincal skill levels by providing clear data model documentation using YAML. This toolkit includes
+Our goal with this project was to develop a toolkit to support data governance across a wide
+range of technical skill levels by providing clear data model documentation using YAML. This toolkit includes
 a Python-based package that validates the YAML, ensuring cross-table references are correct, and supports
 the use of indexing and constraints.
 
@@ -23,13 +23,13 @@ for project metadata and file reference structuring.
 
     ---
 
-    Project overview, outcomes and success metrics.
+    Package documentation for the ddlml Python package..
 
 -   :material-sitemap:{ .lg .middle } __[DDLML Specification](specifications/SPECIFICATION.md)__
   
     ---
 
-    How this project is governed and managed from a personel perspective.
+    Full specifications for the DDLML YAML format.
 
 -   :material-lightbulb:{ .lg .middle } __[Resources and Concepts](resources.md)__
 
@@ -44,20 +44,3 @@ for project metadata and file reference structuring.
     Documentation for the sample database, including table overviews, definitions and links.
 
 </div>
-
-
-## Project layout
-
-```bash
-    main.py    # The main production script to turn the 
-               # various YAML files into code.
-    src/
-        ddlml/  # The folder for the `ddlml` python package.
-    docs/            # Documentation pages.
-    assets/          # Images and supporting data for documentation and testing.
-    tests/           # PyTest testing modules
-    data_definition/ # Folder with composite YAML files for database definitions.
-    validation.yaml  # Supporting file to define valid fields for db elements.
-    pyproject.toml   # Package infrastructure.
-    mkdocs.yaml      # Documentation metadata.
-```

@@ -1,6 +1,6 @@
 [project]
 name = "ddlml"
-version = "2026.10.0a1"
+version = "2026.12.0b1dev1"
 description = "Manage YAML representations of PostgreSQL database definitions, including tables, schema, indices and constraints."
 readme = {file="README.md", content-type = "text/markdown"}
 authors = [
