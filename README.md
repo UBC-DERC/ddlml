@@ -118,13 +118,13 @@ database:
         The public (default) schema.
 ```
 
-If we run:
+Save the example above as `database.yaml` and you can then run the following:
 
 ```bash
-ddlml examples/simple_example/database.yaml --docs docs --output examples/simple_example/output.yaml
+ddlml database.yaml --docs docs --output output.yaml
 ```
 
-We will expect to see that we have a file called [`output.yaml`](https://github.com/UBC-DERC/ddlml/blob/main/examples/simple_example/output.yaml), and a directory in `docs/database` that contains an `index.md` file and two folders, one for each named schema.
+We will expect to see that we have a file called [`output.yaml`](https://github.com/UBC-DERC/ddlml/blob/main/examples/simple_example/output.yaml), and a directory in `docs/database` that contains an `index.md` file and a folder for the public schema.
 
 ### Database with References
 

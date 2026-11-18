@@ -243,7 +243,7 @@ class ddlml_info(BaseModel):
     version: str
     title: str
     summary: str = "No summary provided."
-    description: str = "No description provided."
+    description: str | None = None
     license: license_dict = license_dict(
         name="Default Copyright Applies",
         identifier="LicenseRef-Proprietary",

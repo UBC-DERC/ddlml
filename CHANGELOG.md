@@ -38,7 +38,25 @@ to `ddlml`.
   rejected with a message listing the supported versions. The JSON Schema lists them as
   an `enum`, so editors flag an unsupported version.
 - `info.description`: an optional longer description of the model, which may use
-  CommonMark.
+  CommonMark. If omitted it is empty (`null` in the output), not placeholder text.
+- **Publishing to PyPI.** Releases are published by GitHub Actions using PyPI trusted
+  publishing, so no API tokens are stored:
+  - pushing a `v*.dev*` tag publishes a development build to TestPyPI
+    (`testpypi.yml`);
+  - pushing any other `v*` tag publishes to PyPI (`release.yml`). The workflow first
+    checks the tag:
+    - it must match the `pyproject.toml` version;
+    - the version must follow the PEP 440 pattern;
+    - `CHANGELOG.md` must have a section for that version.
+
+    It then builds, smoke-tests the wheel, uploads the files, and creates the GitHub
+    release with that CHANGELOG section as its notes.
+- README:
+  - install instructions for `pip`, `uv` and `uvx`, including the `ddlml[docs]`
+    extra;
+  - a quick start that works without cloning the repository;
+  - a link to the specification.
+- `Documentation` and `Changelog` links on the PyPI project page.
 - A clear error for documents that still use the old `ddaml_version` key.
 - The CLI reports a missing entry file or invalid YAML on stderr with exit code 1, instead
   of a traceback.
@@ -73,6 +91,15 @@ to `ddlml`.
 - **Breaking:** `ddlml_version` must be a supported specification version (see Added).
   Before, any string was accepted.
 - A contact may now omit `email`; before, a contact with no email failed validation.
+- The package is now marked `Development Status :: 4 - Beta`.
+- The documentation site has a new introduction and is named for DDLML ("Database
+  Definition Language Markup Language"), with the same expansion in the specification.
+  The DERC example database is listed as "Example Database".
+- The `docs` extra no longer installs `mkdocs-mermaid2-plugin` (no page uses Mermaid
+  any more) or `markdown` directly (it still comes in with `mkdocs`).
+- README examples and the table template use the current format: the full
+  `ddlml_version` / `info` / `database` entry file, the `FOREIGN KEY` constraint type,
+  and a required `references.table`.
 - The CHANGELOG and git tags use [PEP 440](https://peps.python.org/pep-0440/) CalVer
   (e.g. `2026.12.0b1`, tagged `v2026.12.0b1`) instead of names like `2026-11-alpha`.
 - `Dockerfile`: runs `ddlml` directly and passes arguments through
@@ -80,13 +107,19 @@ to `ddlml`.
   always printed help. It now uses a pinned `uv` (0.13.8) and installs without
   development dependencies.
 - The specification: fixed the version heading and date, the extensions table, typos and
-  links, and aligned the License, Contact and Info tables with the code.
+  links (including the Schema and Index anchors), and aligned the License, Contact and
+  Info tables with the code.
 - Example models, example outputs, the golden file and the generated docs regenerated for
   the new names, license fields and specification version.
 
 ### Removed
 
 - Compiled `.pyc` files that had been committed.
+- The DERC-specific "Executive Summary" and "Governance and Guidance" pages, and
+  `DESIGN.md`. They will move to the DERC data model's own repository.
+- Generated example documentation that had been committed under `examples/docs/` (now
+  git-ignored).
+- The unused `pytest-datafiles` development dependency.
 
 ### Dependencies
 
