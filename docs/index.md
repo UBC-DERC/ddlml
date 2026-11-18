@@ -23,7 +23,7 @@ for project metadata and file reference structuring.
 
     ---
 
-    Package documentation for the ddlml Python package..
+    Package documentation for the ddlml Python package.
 
 -   :material-sitemap:{ .lg .middle } __[DDLML Specification](specifications/SPECIFICATION.md)__
   
