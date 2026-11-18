@@ -225,7 +225,7 @@ Here the license is defined by the [SPDX License](https://spdx.org/licenses/) na
 | owner | str | By default this is empty and the user is assumed to be `postgres`. |
 | comment | str | A comment at the database level. |
 | extensions | list[str] | A valid set of [Postgres extensions](https://gist.github.com/joelonsql/e5aa27f8cc9bd22b8999b7de8aee9d47) that can be installed from the commandline. |
-| schemas | [Schema Objects](#schema) | An optional field. We can generate a database with no schema. Postgresql will still create a `public` schema. |
+| schemas | [Schema Objects](#schemas) | An optional field. We can generate a database with no schema. Postgresql will still create a `public` schema. |
 
 #### Database Example
 
@@ -287,7 +287,7 @@ A schema can contain zero or more tables.
 | comment | str | A string comment to describe the table. Used as part of the `COMMENT` clause in SQL. Default is "No comment provided". |
 | columns | [Column Object](#column) | Zero or more Column objects, in a list. |
 | constraints | [Constraint Object](#constraint) | Zero or more constraint objects in a list. |
-| indexes | [Index Object](#index) | Zero or more Index objects in a list |
+| indexes | [Index Object](#indexes) | Zero or more Index objects in a list |
 
 #### Table Example
 
@@ -524,7 +524,7 @@ In the case where additional metadata helps explain an object, or works to enric
 
 | Field Pattern | Type | Description |
 | ------------- | ---- | ----------- |
-| `^x-` | Any | An extension for [Tables](#table), [Columns](#column) and [Schema](#schema) only. These extensions may include additional objects named with the `x-` preface. For example `x-references`. These objects are exported to the final object, but are generally used to support metadata for the objects, and are not explicitly used for data management or DDL construction. |
+| `^x-` | Any | An extension for [Tables](#table), [Columns](#column) and [Schema](#schemas) only. These extensions may include additional objects named with the `x-` preface. For example `x-references`. These objects are exported to the final object, but are generally used to support metadata for the objects, and are not explicitly used for data management or DDL construction. |
 
 There is currently no mechanism to validate these extensions, but they are passed through to the validated output.
 

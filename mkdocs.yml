@@ -79,7 +79,6 @@ hooks:
 extra_css:
   - stylesheets/extra.css
 plugins:
-  - mermaid2
   - include_dir_to_nav:
       flat: false
   - mkdocstrings:
@@ -108,12 +107,6 @@ markdown_extensions:
   - toc:
       permalink: true
   - pymdownx.details
-  - pymdownx.superfences:
-        # make exceptions to highlighting of code:
-      custom_fences:
-        - name: mermaid
-          class: mermaid
-          format: !!python/name:mermaid2.fence_mermaid_custom
   - pymdownx.emoji:
       emoji_index: !!python/name:material.extensions.emoji.twemoji
       emoji_generator: !!python/name:material.extensions.emoji.to_svg

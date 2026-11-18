@@ -344,7 +344,6 @@ dependencies = [
 
 [package.optional-dependencies]
 docs = [
-    { name = "markdown" },
     { name = "mkdocs" },
     { name = "mkdocs-include-dir-to-nav" },
     { name = "mkdocs-material" },
@@ -358,20 +357,17 @@ dev = [
     { name = "mkdocs", extra = ["i18n"] },
     { name = "mkdocs-include-dir-to-nav" },
     { name = "mkdocs-material" },
-    { name = "mkdocs-mermaid2-plugin" },
     { name = "mkdocs-minify-plugin" },
     { name = "mkdocstrings", extra = ["python"] },
     { name = "pre-commit" },
     { name = "pytest" },
     { name = "pytest-cov" },
-    { name = "pytest-datafiles" },
     { name = "ruff" },
     { name = "ty" },
 ]
 
 [package.metadata]
 requires-dist = [
-    { name = "markdown", marker = "extra == 'docs'", specifier = ">=3.10.3" },
     { name = "mkdocs", marker = "extra == 'docs'", specifier = ">=1.6.1" },
     { name = "mkdocs-include-dir-to-nav", marker = "extra == 'docs'", specifier = ">=1.2.0" },
     { name = "mkdocs-material", marker = "extra == 'docs'", specifier = ">=9.7.6" },
@@ -390,13 +386,11 @@ dev = [
     { name = "mkdocs", extras = ["i18n"], specifier = ">=1.6.1" },
     { name = "mkdocs-include-dir-to-nav", specifier = ">=1.2.0" },
     { name = "mkdocs-material", specifier = ">=9.7.6" },
-    { name = "mkdocs-mermaid2-plugin", specifier = ">=1.2.3" },
     { name = "mkdocs-minify-plugin", specifier = ">=0.8.0" },
     { name = "mkdocstrings", extras = ["python"], specifier = ">=1.0.4" },
     { name = "pre-commit", specifier = ">=4.7.0" },
     { name = "pytest", specifier = ">=9.1.1" },
     { name = "pytest-cov", specifier = ">=7.1.0" },
-    { name = "pytest-datafiles", specifier = ">=3.0.1" },
     { name = "ruff", specifier = ">=0.6.0" },
     { name = "ty", specifier = ">=0.0.69" },
 ]
@@ -1066,18 +1060,6 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/b1/51/a849f96e117386044471c8ec2bd6cfebacda285da9525c9106aeb28da671/pytest_cov-7.1.0.tar.gz", hash = "sha256:30674f2b5f6351aa09702a9c8c364f6a01c27aae0c1366ae8016160d1efc56b2", size = 55592, upload-time = "2026-03-21T20:11:16.284Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/9d/7a/d968e294073affff457b041c2be9868a40c1c71f4a35fcc1e45e5493067b/pytest_cov-7.1.0-py3-none-any.whl", hash = "sha256:a0461110b7865f9a271aa1b51e516c9a95de9d696734a2f71e3e78f46e1d4678", size = 22876, upload-time = "2026-03-21T20:11:14.438Z" },
-]
-
-[[package]]
-name = "pytest-datafiles"
-version = "3.0.1"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "pytest" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/fc/8d/081ba12c1ea4eb1b899eb61b4501136c233492280fdb70343edcdfdf26ce/pytest_datafiles-3.0.1.tar.gz", hash = "sha256:05fc3eef2429fe26ae42283cccb1f3831b53b12d4bd8b4734bf42973d4af6e16", size = 222220, upload-time = "2026-01-04T15:08:23.287Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/4b/23/88880d5dc36eac9696ad40823e37c1fdbfa81a67b9cfd0ed445b3ed7ec54/pytest_datafiles-3.0.1-py3-none-any.whl", hash = "sha256:c48f27a8afec03a482a10587ab5f5ab930ced4cbdeb2e3a2cbcc0323a51d22c7", size = 6357, upload-time = "2026-01-04T15:08:25.132Z" },
 ]
 
 [[package]]
