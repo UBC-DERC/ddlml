@@ -153,7 +153,7 @@ class table_dict(extensible_dict):
     name: str
     schema_: str | None = Field(default=None, alias="schema")
     type: str = "BASE TABLE"
-    comment: str | None = "No comment provided."
+    comment: str = "No comment provided."
     columns: list[column_dict]
     constraints: list[constraint_dict] = []
     indexes: list[index_dict] = []
@@ -243,7 +243,7 @@ class ddlml_info(BaseModel):
     version: str
     title: str
     summary: str = "No summary provided."
-    description: str | None = None
+    description: str = "No Description Provided"
     license: license_dict = license_dict(
         name="Default Copyright Applies",
         identifier="LicenseRef-Proprietary",
