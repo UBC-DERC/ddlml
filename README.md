@@ -10,7 +10,7 @@
 
 This project generates a valid YAML file to help manage the development and evolution of SQL data models. It supports the creation of a Postgres database with extensions, schemas, tables, columns, indexes and constraints. A user will create a set of YAML files representing the database, organized within folders, and the script will validate these files and generate linked markdown documentation for the user. The documentation is structured such that it can be easily placed into an existing `mkdocs` project.
 
-This repository contains an example `yaml` data representation in the `examples` folder, based on early prototyping of the data model for the [UBC Dairy Education and Research Center](https://dairycentre.landfood.ubc.ca/).  The `yaml` formatting follows the example used by [`tbls`](https://github.com/k1Low/tbls) elsewhere, with an added directory structuring to make individual tables easier to process, modify, validate and document. Structurally we aim to borrow aspects of `tabls` and the [OpenAPI project](https://www.openapis.org/). Both of which heavily influenced our thinking and design philosophies.
+This repository contains an example `yaml` data representation in the `examples` folder, based on early prototyping of the data model for the [UBC Dairy Education and Research Center](https://dairycentre.landfood.ubc.ca/).  The `yaml` formatting follows the example used by [`tbls`](https://github.com/k1Low/tbls) elsewhere, with an added directory structuring to make individual tables easier to process, modify, validate and document. Structurally we aim to borrow aspects of `tbls` and the [OpenAPI project](https://www.openapis.org/). Both of which heavily influenced our thinking and design philosophies.
 
 ## Optimal Design Flow
 
