@@ -1,4 +1,4 @@
-site_name: Database Definition Language Markup Language (DDLML)
+site_name: Data Definition Language Markup Language (DDLML)
 repo_url: https://github.com/UBC-DERC/ddlml/
 site_description: |
   Documentation and guidance for building DDL models using YAML, including specifications,

@@ -1,7 +1,7 @@
 [project]
 name = "ddlml"
 version = "2026.12.0b1.dev1"
-description = "Manage YAML representations of PostgreSQL database definitions, including tables, schema, indices and constraints."
+description = "Manage YAML representations of PostgreSQL data definitions, including tables, schema, indices and constraints."
 readme = {file="README.md", content-type = "text/markdown"}
 authors = [
     { name = "Simon Goring", email = "simon.goring@ubc.ca" }
@@ -18,7 +18,7 @@ dependencies = [
 ]
 license = "MIT"
 license-files = ["LICENSE.md"]
-keywords = ["data model", "database", "postgres", "data governance", "documentation", "data description language"]
+keywords = ["data model", "database", "postgres", "data governance", "documentation", "data definition language"]
 classifiers=[
     "Development Status :: 4 - Beta",
     "Environment :: Console",

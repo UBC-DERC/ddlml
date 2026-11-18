@@ -2,7 +2,7 @@
 
 Date: November 16, 2026
 
-This document serves to define the specifications for the DDLML (Database Definition Language Markup Language) format that will be used to generate valid (Postgres) data definition language (DDL) structure through the [`ddlml`](https://github.com/UBC-DERC/ddlml) and the [`ddl_builder`](https://github.com/UBC-DERC/ddl_builder) Python packages. The goal is to develop a human readable document format that can be processed by a Python script and transformed into usable SQL to work within a system in which atomic features of databases are required, but schema or data model specifications may change over time.
+This document serves to define the specifications for the DDLML (Data Definition Language Markup Language) format that will be used to generate valid (Postgres) data definition language (DDL) structure through the [`ddlml`](https://github.com/UBC-DERC/ddlml) and the [`ddl_builder`](https://github.com/UBC-DERC/ddl_builder) Python packages. The goal is to develop a human readable document format that can be processed by a Python script and transformed into usable SQL to work within a system in which atomic features of databases are required, but schema or data model specifications may change over time.
 
 This format will attempt to mirror other existing schema, and is strongly influenced by [OpenAPI](https://spec.openapis.org/oas/latest.html).
 
