@@ -1,17 +1,16 @@
-site_name: DERC Data Modelling
+site_name: Data Description Language Markdown Language (DDLML)
 repo_url: https://github.com/UBC-DERC/ddlml/
 site_description: |
-  Documentation and guidance for the DERC Dairy Database, including technical build information,
-  data model sources and inspirations, and guidance on modifying the model, proposing new data structures
-  and using the system to build new databases.
+  Documentation and guidance for building DDL models using YAML, including specifications,
+  examples and Python packaging for validation and documentation. This tool is intended to
+  support the development of data models, particularly in the context of research data
+  management where a high priority is placed on decision making and repoducibility.
 site_author: Simon Goring
 copyright: '2026'
 site_url: https://ubc-derc.github.io/ddlml/
 nav:
   - Introduction: 'index.md'
-  - Executive Summary: 'summary/executive_summary.md'
-  - Governance and Guidance: 'admin/governance.md'
-  - Database Description:
+  - Example Database:
     - database/
   - Package API Reference:
     - Overview: 'api/index.md'
