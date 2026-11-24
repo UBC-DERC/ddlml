@@ -86,6 +86,10 @@ The YAML file(s) used to define the database can be structured so that they are 
 
 This conceptual model borrows from the [OpenAPI `$ref` implementation](https://swagger.io/docs/specification/v3_0/using-ref/).
 
+If working with an editor like VS Code, take a look at the [Editor Setup](https://ubc-derc.github.io/ddlml/api/schema) instructions to help write and validate the `ddlml` in your editor of choice.
+
+The ddlml [JSON schema](https://ubc-derc.github.io/ddlml/schema.json) can be found in the documentation.
+
 ### File and Folder Structure
 
 Within this repository we will create a named folder, here [`data_definitions`](https://github.com/UBC-DERC/ddlml/blob/main/examples/data_definitions). Within the folder are all the `yaml` files that make up the data model. These files contain the critical information for database, schema, table and column definitions. We create these files to support the work of experts in defining the critical fields and concepts used in the database.
@@ -103,6 +107,7 @@ ddlml_version: 2026.11.12
 info:
   title: Simple Example
   summary: A data model for a very simple explanation
+  description: No description provided.
   version: 1.0.0
   license:
     name: CC0-1.0
@@ -135,6 +140,14 @@ ddlml_version: 2026.11.12
 info:
   title: Dairy Model
   summary: A data model for dairy farm management
+  description: |
+    This data model is designed to support the management of dairy farms,
+    including tracking of cows, milk production, feed, and other related data.
+    The Dairy Model provides a structured schema for storing and querying
+    information relevant to dairy farm operations. This example was developed
+    in part, to support the development of a more complete data model at the
+    University of British Columbia's Dairy Education and Research Centre
+    ([UBC DERC](https://dairycentre.landfood.ubc.ca/)).
   version: 1.0.0
   license:
     name: CC0-1.0
