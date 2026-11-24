@@ -25,4 +25,9 @@ docs/database
 docs/schema.json
 
 examples/**/output.yaml
+
+!examples/data_definitions/output.yaml
+!examples/simple_example/output.yaml
+
 hooks/**/*.pyc
+/output.yaml
