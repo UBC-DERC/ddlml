@@ -22,7 +22,7 @@ from .object_classes import ddlml_dict
 
 def _build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        prog="data-model",
+        prog="ddlml",
         description="Validate a YAML data model and write documentation and a composite YAML file.",
     )
     parser.add_argument("entry", help="Path to the database entry YAML file.")
@@ -45,6 +45,12 @@ def main(argv: list[str] | None = None) -> int:
         database: ddlml_dict = load_database(args.entry)
     except (ModelValidationError, ReferenceCheckError, ValidationError) as error:
         print(error, file=sys.stderr)
+        return 1
+    except FileNotFoundError as error:
+        print(f"ddlml: {error}", file=sys.stderr)
+        return 1
+    except yaml.YAMLError as error:
+        print(f"ddlml: could not parse YAML: {error}", file=sys.stderr)
         return 1
 
     output_path = Path(args.output)

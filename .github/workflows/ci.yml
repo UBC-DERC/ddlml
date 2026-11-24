@@ -32,6 +32,8 @@ jobs:
         run: uv run ty check --output-format=github
       - name: Tests (pytest)
         run: uv run pytest -q
+      - name: Generate the database documentation.
+        run: uv run ddlml examples/data_definitions/dairymodel.yaml --docs docs --output "$RUNNER_TEMP/output.yaml"
       - name: Docs build (strict)
         run: uv run mkdocs build --strict
 
@@ -63,6 +65,8 @@ jobs:
           restore-keys: |
             mkdocs-material-
       - run: uv sync --frozen
+      - name: Generate the database documentation.
+        run: uv run ddlml examples/data_definitions/dairymodel.yaml --docs docs --output "$RUNNER_TEMP/output.yaml"
       - name: Build static files
         id: build
         run: uv run mkdocs build

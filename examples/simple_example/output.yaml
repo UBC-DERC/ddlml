@@ -11,15 +11,15 @@ database:
       '
     name: public
     tables: []
-ddlml_version: 2026.10.5
+ddlml_version: 2026.11.12
 info:
   contacts:
   - email: simple@example.com
     name: Simple Example Team
     url: null
   license:
-    full_name: CC0-1.0
-    licenseId: null
+    identifier: null
+    name: CC0-1.0
     url: https://creativecommons.org/publicdomain/zero/1.0/
   summary: A data model for a very simple explanation
   title: Simple Example

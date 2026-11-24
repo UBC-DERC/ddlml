@@ -1,10 +1,8 @@
 
 .vscode/
 
-src/data_model.egg-info/
 src/ddlml.egg-info/
 
-src/data_model/__pycache__/
 src/ddlml/__pycache__/*
 
 site/
@@ -12,6 +10,7 @@ site/
 tests/__pycache__/
 
 docs/superpowers/
+examples/docs
 
 .superpowers/
 
@@ -26,4 +25,9 @@ docs/database
 docs/schema.json
 
 examples/**/output.yaml
+
+!examples/data_definitions/output.yaml
+!examples/simple_example/output.yaml
+
 hooks/**/*.pyc
+/output.yaml

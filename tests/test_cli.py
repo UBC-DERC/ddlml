@@ -1,4 +1,4 @@
-"""Tests for the data-model command-line entry point."""
+"""Tests for the ddlml command-line entry point."""
 
 import pytest
 import yaml
@@ -30,6 +30,10 @@ def test_cli_success_writes_both_artifacts(tmp_path):
     assert out.exists()
     assert yaml.safe_load(out.read_text())["database"]["name"] == "dairymodel"
     assert docs.exists() and any(docs.iterdir())
+    assert (
+        yaml.safe_load(out.read_text())["database"]["schemas"][0]["x-example"]
+        == "example"
+    )
 
 
 def test_cli_invalid_entry_exits_1_and_writes_nothing(tmp_path, write_yaml, capsys):
@@ -94,3 +98,27 @@ def test_cli_missing_output_exits_2(tmp_path, capsys):
     err = capsys.readouterr().err
     assert "the following arguments are required: -o/--output" in err
     assert not any(tmp_path.iterdir()) or list(tmp_path.iterdir()) == [entry]
+
+
+def test_cli_missing_entry_exits_1_without_traceback(tmp_path, capsys):
+    out = tmp_path / "output.yaml"
+    code = main([str(tmp_path / "nope.yaml"), "--output", str(out)])
+
+    assert code == 1
+    assert not out.exists()
+    err = capsys.readouterr().err
+    assert "nope.yaml" in err
+    assert "Traceback" not in err
+
+
+def test_cli_missing_ref_target_exits_1(tmp_path, write_yaml, capsys):
+    entry = write_yaml(
+        "db.yaml",
+        [{"database": {"name": "d", "schemas": [{"$ref": "schemas/missing.yaml"}]}}],
+    )
+    out = tmp_path / "output.yaml"
+    code = main([str(entry), "--output", str(out)])
+
+    assert code == 1
+    assert not out.exists()
+    assert "missing.yaml" in capsys.readouterr().err

@@ -1,0 +1,56 @@
+name: Publish to PyPI
+on:
+  push:
+    tags:
+      - "v*"
+      - "!v*.dev*"
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    environment: pypi
+    permissions:
+      contents: write   # create the GitHub release
+      id-token: write   # trusted publishing
+    steps:
+      - uses: actions/checkout@f548e57e544e1ff5a4c46bf1e1b8685f8e4a348a # v7
+        with:
+          persist-credentials: false
+      - uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2 # v10.3.3
+        with:
+          enable-cache: false
+      - name: Check the tag, version and changelog
+        run: |
+          python3 - <<'EOF'
+          import os, re, sys, tomllib
+          tag = os.environ["GITHUB_REF_NAME"].removeprefix("v")
+          version = tomllib.load(open("pyproject.toml", "rb"))["project"]["version"]
+          pattern = r"^\d{4}\.(?:[1-9]|1[0-2])\.(?:0|[1-9]\d*)(?:(?:a|b|rc)(?:0|[1-9]\d*))?(?:\.dev(?:0|[1-9]\d*))?$"
+          if tag != version:
+              sys.exit(f"Tag v{tag} does not match the pyproject.toml version {version}")
+          if not re.match(pattern, version):
+              sys.exit(f"{version} does not match the CONTRIBUTING version pattern")
+          text = open("CHANGELOG.md").read()
+          m = re.search(rf"^## \[{re.escape(version)}\][^\n]*\n(.*?)(?=^## \[|\Z)", text, re.M | re.S)
+          if not m or not m.group(1).strip():
+              sys.exit(f"CHANGELOG.md has no [{version}] section")
+          open("release-notes.md", "w").write(m.group(1).strip() + "\n")
+          EOF
+      - run: uv build --no-sources
+      - name: Smoke-test the wheel
+        run: uv run --isolated --no-project --with dist/*.whl ddlml --help
+      - run: uv publish --trusted-publishing always --check-url https://pypi.org/simple/
+      - name: Create the GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          PRERELEASE=""
+          if [[ "$GITHUB_REF_NAME" =~ (a|b|rc)[0-9]+$ ]]; then PRERELEASE="--prerelease"; fi
+          gh release create "$GITHUB_REF_NAME" dist/* \
+            --repo "$GITHUB_REPOSITORY" \
+            --title "$GITHUB_REF_NAME" \
+            --notes-file release-notes.md \
+            --verify-tag $PRERELEASE

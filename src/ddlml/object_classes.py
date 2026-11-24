@@ -3,7 +3,7 @@ from enum import Enum
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 from validators import email, url
 
-SUPPORTED_DDLML_VERSIONS: tuple[str, ...] = ("2026.10.5",)
+SUPPORTED_DDLML_VERSIONS: tuple[str, ...] = ("2026.11.12",)
 CURRENT_DDLML_VERSION = SUPPORTED_DDLML_VERSIONS[-1]
 
 
@@ -153,7 +153,7 @@ class table_dict(extensible_dict):
     name: str
     schema_: str | None = Field(default=None, alias="schema")
     type: str = "BASE TABLE"
-    comment: str | None = "No comment provided."
+    comment: str = "No comment provided."
     columns: list[column_dict]
     constraints: list[constraint_dict] = []
     indexes: list[index_dict] = []
@@ -178,14 +178,14 @@ class DDL_Dict(BaseModel):
 
 class license_dict(BaseModel):
     model_config = ConfigDict(extra="forbid")
-    full_name: str
-    licenseId: str | None = None
+    name: str
+    identifier: str | None = None
     url: str | None = None
 
     @model_validator(mode="after")
     def _one_thing_or_another(self):
-        if self.licenseId is not None and self.url is not None:
-            raise ValueError("Only one of licenseId or url may be provided; not both.")
+        if self.identifier is not None and self.url is not None:
+            raise ValueError("Only one of identifier or url may be provided; not both.")
         return self
 
     @model_validator(mode="after")
@@ -195,15 +195,15 @@ class license_dict(BaseModel):
         return self
 
     @model_validator(mode="after")
-    def _validate_licenseId_or_url(self):
-        if self.licenseId is None and self.url is None:
-            raise ValueError("Either licenseId or url must be provided.")
+    def _validate_identifier_or_url(self):
+        if self.identifier is None and self.url is None:
+            raise ValueError("Either identifier or url must be provided.")
         return self
 
     @model_validator(mode="after")
-    def _validate_full_name(self):
-        if not self.full_name.strip():
-            raise ValueError("full_name cannot be an empty string.")
+    def _validate_name(self):
+        if not self.name.strip():
+            raise ValueError("name cannot be an empty string.")
         return self
 
     @model_validator(mode="after")
@@ -213,9 +213,9 @@ class license_dict(BaseModel):
         return self
 
     @model_validator(mode="after")
-    def _validate_licenseId(self):
-        if self.licenseId is not None and not self.licenseId.strip():
-            raise ValueError("licenseId cannot be an empty string.")
+    def _validate_identifier(self):
+        if self.identifier is not None and not self.identifier.strip():
+            raise ValueError("identifier cannot be an empty string.")
         return self
 
 
@@ -243,9 +243,10 @@ class ddlml_info(BaseModel):
     version: str
     title: str
     summary: str = "No summary provided."
+    description: str = "No description provided."
     license: license_dict = license_dict(
-        full_name="Default Copyright Applies",
-        licenseId="LicenseRef-Proprietary",
+        name="Default Copyright Applies",
+        identifier="LicenseRef-Proprietary",
     )
     contacts: list[contact_dict] = []
 

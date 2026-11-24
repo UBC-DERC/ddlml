@@ -3,7 +3,132 @@
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
-and this project adheres to [Calendar Versioning](https://calver.org/) using a YYYY-MM model.
+and this project adheres to [Calendar Versioning](https://calver.org/) following [PEP 440](https://peps.python.org/pep-0440/) (all version numbers should resolve using `^\d{4}\.(?:[1-9]|1[0-2])\.(?:0|[1-9]\d*)(?:(?:a|b|rc)(?:0|[1-9]\d*))?(?:\.dev(?:0|[1-9]\d*))?$`).
+
+This supports the following PEP440 styles:
+
+* 2026.12.1
+* 2027.1.0.dev3
+* 2028.1.0a1
+
+NOTE: Some earlier versions of this software (in the changelogs and git-tags) may show non compliant CALVER versioning. We maintain them for transparency.
+
+## [Unreleased]
+
+Planned as `2026.12.0b1`, the first beta on PyPI. Specification version `2026.11.12`.
+
+### Migrating from `2026-11-alpha`
+
+Existing models need three changes before they validate:
+
+1. Rename the top-level key `ddaml_version` to `ddlml_version`.
+2. Set it to `2026.11.12`, the only supported specification version.
+3. In `info.license`, rename `full_name` to `name` and `licenseId` to `identifier`.
+   Give either `identifier` or `url`, not both.
+
+Code that imports the package changes from `data_model` to `ddlml` (for example
+`from ddlml.object_classes import DDL_Dict`), and the command changes from `data-model`
+to `ddlml`.
+
+### Added
+
+- **Specification version check.** `SUPPORTED_DDLML_VERSIONS` lists the specification
+  versions this release accepts (currently only `2026.11.12`), and
+  `CURRENT_DDLML_VERSION` is the newest. A document with any other `ddlml_version` is
+  rejected with a message listing the supported versions. The JSON Schema lists them as
+  an `enum`, so editors flag an unsupported version.
+- `info.description`: an optional longer description of the model, which may use
+  CommonMark. If omitted it defaults to `No description provided.`
+- **Publishing to PyPI.** Releases are published by GitHub Actions using PyPI trusted
+  publishing, so no API tokens are stored:
+  - pushing a `v*.dev*` tag publishes a development build to TestPyPI
+    (`testpypi.yml`);
+  - pushing any other `v*` tag publishes to PyPI (`release.yml`). The workflow first
+    checks the tag:
+    - it must match the `pyproject.toml` version;
+    - the version must follow the PEP 440 pattern;
+    - `CHANGELOG.md` must have a section for that version.
+
+    It then builds, smoke-tests the wheel, uploads the files, and creates the GitHub
+    release with that CHANGELOG section as its notes.
+- README:
+  - install instructions for `pip`, `uv` and `uvx`, including the `ddlml[docs]`
+    extra;
+  - a quick start that works without cloning the repository;
+  - a link to the specification.
+- `Documentation` and `Changelog` links on the PyPI project page.
+- A clear error for documents that still use the old `ddaml_version` key.
+- The CLI reports a missing entry file or invalid YAML on stderr with exit code 1, instead
+  of a traceback.
+- **Specification:** an example for every object (in collapsible blocks), a section on
+  `x-` extensions, and a "File References (`$ref`)" section describing how references
+  resolve and the current limits.
+- `CONTRIBUTING.md`: how specification and package versions differ, the steps for a new
+  specification version, the PEP 440 version scheme, git-flow branch and merge rules, and
+  the release steps.
+- Tests:
+  - every example entry file and the specification heading use the current
+    specification version;
+  - unsupported versions and the old `ddaml_version` key are rejected;
+  - `x-` keys pass through the CLI to the output;
+  - the `simple_example` quick start builds;
+  - a missing entry file and invalid YAML exit cleanly.
+
+### Changed
+
+- **Breaking: renamed from `data_model` / DDAML to `ddlml`.** "DDAML" is already the name
+  of another markup language. This covers:
+  - the package on PyPI (`data-model` → `ddlml`) and the import (`data_model` → `ddlml`);
+  - the command (`data-model` → `ddlml`);
+  - the document key (`ddaml_version` → `ddlml_version`);
+  - the models (`ddaml_dict` → `ddlml_dict`, `ddaml_info` → `ddlml_info`);
+  - the repository, documentation site and JSON Schema URL, now
+    `https://github.com/UBC-DERC/ddlml` and `https://ubc-derc.github.io/ddlml/schema.json`.
+- **Breaking:** the license fields now follow the OpenAPI License Object: `full_name` →
+  `name`, `licenseId` → `identifier`. `identifier` and `url` are mutually exclusive, and one
+  of them is required. The default license is `name: Default Copyright Applies`,
+  `identifier: LicenseRef-Proprietary`.
+- **Breaking:** `ddlml_version` must be a supported specification version (see Added).
+  Before, any string was accepted.
+- A contact may now omit `email`; before, a contact with no email failed validation.
+- The package is now marked `Development Status :: 4 - Beta`.
+- The documentation site has a new introduction and is named for DDLML ("Database
+  Definition Language Markup Language"), with the same expansion in the specification.
+  The DERC example database is listed as "Example Database".
+- The `docs` extra no longer installs `mkdocs-mermaid2-plugin` (no page uses Mermaid
+  any more) or `markdown` directly (it still comes in with `mkdocs`).
+- README examples and the table template use the current format: the full
+  `ddlml_version` / `info` / `database` entry file, the `FOREIGN KEY` constraint type,
+  and a required `references.table`.
+- The CHANGELOG and git tags use [PEP 440](https://peps.python.org/pep-0440/) CalVer
+  (e.g. `2026.12.0b1`, tagged `v2026.12.0b1`) instead of names like `2026-11-alpha`.
+- `Dockerfile`: runs `ddlml` directly and passes arguments through
+  (`docker run … ddlml <entry> --docs … --output …`), defaulting to `--help`. Before, it
+  always printed help. It now uses a pinned `uv` (0.13.8) and installs without
+  development dependencies.
+- The specification: fixed the version heading and date, the extensions table, typos and
+  links (including the Schema and Index anchors), and aligned the License, Contact and
+  Info tables with the code.
+- Example models, example outputs, the golden file and the generated docs regenerated for
+  the new names, license fields and specification version.
+
+### Removed
+
+- Compiled `.pyc` files that had been committed.
+- The DERC-specific "Executive Summary" and "Governance and Guidance" pages, and
+  `DESIGN.md`. They will move to the DERC data model's own repository.
+- Generated example documentation that had been committed under `examples/docs/` (now
+  git-ignored).
+- The unused `pytest-datafiles` development dependency.
+
+### Dependencies
+
+- Updated `pydantic` to 2.14.3 and `markdown` to 3.11.3, plus other lock-file updates.
+- Updated GitHub Actions (`setup-uv` 10.3.3, `codeql-action` 4.39.3) via Dependabot.
+
+### Contributors
+
+- Simon Goring
 
 ## [2026-11-alpha]
 
@@ -77,7 +202,7 @@ and this project adheres to [Calendar Versioning](https://calver.org/) using a Y
 ### Added
 
 - **JSON Schema publication**: Auto-generated from Pydantic models and published to docs site
-  at `https://ubc-derc.github.io/data_model/schema.json`.
+  at `https://ubc-derc.github.io/ddlml/schema.json`.
 - **Schema documentation page** (`docs/api/schema.md`) with VS Code integration guide for
   editor autocompletion and validation.
 - **Pre-commit hook** for `ruff` and `ty` checks on `develop` and `main` branches (gitflow).

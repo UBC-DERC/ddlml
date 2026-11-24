@@ -32,6 +32,11 @@ def load_database(filename: str) -> ddlml_dict:
             f"database entry file {filename!r} has no 'database:' block; "
             "cannot load database model."
         )
+    if db.get("ddaml_version") is not None:
+        raise ModelValidationError(
+            f"database entry file {filename!r} has 'ddaml_version' block; "
+            "the module has been renamed ddlml, with the tag 'ddlml_version'."
+        )
     db_slug["schemas"] = [
         load_schema(base / s["$ref"]) if "$ref" in s else s
         for s in db_slug.get("schemas") or []

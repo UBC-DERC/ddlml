@@ -1,10 +1,18 @@
-ddlml_version: 2026.10.5
+ddlml_version: 2026.11.12
 info:
   title: Dairy Model
-  summary: A data model for dairy farm management
+  summary: A data model for dairy farm management.
+  description: |
+    This data model is designed to support the management of dairy farms,
+    including tracking of cows, milk production, feed, and other related data.
+    The Dairy Model provides a structured schema for storing and querying
+    information relevant to dairy farm operations. This example was developed
+    in part, to support the development of a more complete data model at the
+    University of British Columbia's Dairy Education and Research Centre
+    ([UBC DERC](https://dairycentre.landfood.ubc.ca/)).
   version: 1.0.0
   license:
-    full_name: CC0-1.0
+    name: CC0-1.0
     url: https://creativecommons.org/publicdomain/zero/1.0/
   contacts:
     - name: Dairy Model Team

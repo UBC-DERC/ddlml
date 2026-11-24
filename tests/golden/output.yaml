@@ -937,22 +937,38 @@ database:
       name: publications
       schema: dairy
       type: BASE TABLE
+    x-example: example
   - comment: 'The schema used for application specific tables, views and materialized
       views.
 
       '
     name: apps
     tables: []
-ddlml_version: 2026.10.5
+ddlml_version: 2026.11.12
 info:
   contacts:
   - email: dairy@example.com
     name: Dairy Model Team
     url: null
+  description: 'This data model is designed to support the management of dairy farms,
+
+    including tracking of cows, milk production, feed, and other related data.
+
+    The Dairy Model provides a structured schema for storing and querying
+
+    information relevant to dairy farm operations. This example was developed
+
+    in part, to support the development of a more complete data model at the
+
+    University of British Columbia''s Dairy Education and Research Centre
+
+    ([UBC DERC](https://dairycentre.landfood.ubc.ca/)).
+
+    '
   license:
-    full_name: CC0-1.0
-    licenseId: null
+    identifier: null
+    name: CC0-1.0
     url: https://creativecommons.org/publicdomain/zero/1.0/
-  summary: A data model for dairy farm management
+  summary: A data model for dairy farm management.
   title: Dairy Model
   version: 1.0.0
