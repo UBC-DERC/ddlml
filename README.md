@@ -4,7 +4,7 @@
 
 [![](https://img.shields.io/badge/License-MIT-green.svg)](https://github.com/UBC-DERC/ddlml/blob/main/LICENSE.md)
 
-[![CalVer - 2026.12.0b1.dev2](https://img.shields.io/badge/calver-2026.12.0b1.dev2-22bfda.svg)](https://calver.org/)
+[![CalVer - 2026.12.0b1.dev2](https://img.shields.io/badge/calver-2026.12.0b1.dev3-22bfda.svg)](https://calver.org/)
 
 # Human Readable Data Models for Database Design
 

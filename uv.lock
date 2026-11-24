@@ -320,7 +320,7 @@ sdist = { url = "https://files.pythonhosted.org/packages/f1/2a/8c3ac3d8bc94e6de8
 
 [[package]]
 name = "ddlml"
-version = "2026.12.0b1.dev2"
+version = "2026.12.0b1.dev3"
 source = { editable = "." }
 dependencies = [
     { name = "py-markdown-table" },
