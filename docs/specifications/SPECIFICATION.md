@@ -125,8 +125,8 @@ These fields are similar to the fields defined in the [OpenAPI v3.2.1 Specificat
 | Field name | Type | Description |
 | --- | --- | --- |
 | title | str | REQUIRED. The title of the data model (different from the database name). This is a formal title for the document. |
-| summary | str | A short summary of the data model. Defaults to `"No Summary provided"` |
-| description | str | A longer description of the data model that can use [CommonMark](https://commonmark.org/) syntax for rich text representation. Defaults to `"No Description provided"`. |
+| summary | str | A short summary of the data model. Defaults to `No summary provided.` |
+| description | str | A longer description of the data model that can use [CommonMark](https://commonmark.org/) syntax for rich text representation. Defaults to `No description provided.`. |
 | contacts | [Contact Object](#contacts) | The contact information for the metadata and data model maintainer. |
 | license | [License Object](#license) | The license information for the data model and structured repository associated with it. |
 | version | str | REQUIRED. The version of the DDLML document (which is distinct from the DDLML Specification version). |
@@ -139,6 +139,7 @@ Here is a simple example of an info block for a project building an open data re
     ```yaml
     title: zebrafishdb
     summary: A public database for managing information about zebrafish genetics
+    description: No description provided.
     contacts:
       - name: Oksana Honchar
         url: https://example.com/oksanahonchar

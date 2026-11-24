@@ -38,7 +38,7 @@ to `ddlml`.
   rejected with a message listing the supported versions. The JSON Schema lists them as
   an `enum`, so editors flag an unsupported version.
 - `info.description`: an optional longer description of the model, which may use
-  CommonMark. If omitted it is empty (`null` in the output), not placeholder text.
+  CommonMark. If omitted it defaults to `No description provided.`
 - **Publishing to PyPI.** Releases are published by GitHub Actions using PyPI trusted
   publishing, so no API tokens are stored:
   - pushing a `v*.dev*` tag publishes a development build to TestPyPI
