@@ -2,8 +2,6 @@ database:
   comment: No comment provided.
   encoding: UTF8
   extensions:
-  - postgis
-  - pg_stat_monitor
   - pg_trgm
   locale: en_CA
   name: dairymodel
