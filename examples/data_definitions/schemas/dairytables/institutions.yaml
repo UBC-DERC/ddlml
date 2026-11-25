@@ -10,7 +10,7 @@
   - $ref: columns/datemodified.yaml
   - name: superceedingrecord
     comment: In the case a record is replaced with an alternative record (for example a manufacturer is sold to a new company).
-    type: UUID7
+    type: uuid
   constraints:
   - name: institutionid_pk
     comment: Primary key for the institutions table (expects to be unique)
@@ -25,6 +25,6 @@
       - superceedingrecord
     references:
       table: institutions
-      columns: 
+      columns:
         - institutionid
     ddl: FOREIGN KEY (superceedingrecord) REFERENCES institutions(institutionid)

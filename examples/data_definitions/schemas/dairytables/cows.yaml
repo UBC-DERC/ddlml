@@ -12,8 +12,8 @@
     - name: cowschemeid
       type: text
       comment: >-
-        We clearly identify the scheme from which the cow ID is coming from. It is implied 
-        that this is the Canadian data scheme, but if this data is used in synthesis work 
+        We clearly identify the scheme from which the cow ID is coming from. It is implied
+        that this is the Canadian data scheme, but if this data is used in synthesis work
         it is important to identify the source.
     - name: localcowid
       type: integer
@@ -22,7 +22,7 @@
         where Y is the last number of the year (6 for 2026) and NNN is the birth order of
         the cow in a given year.
     - name: gender
-      type: nchar(1)
+      type: char(1)
       comment: >-
         We record both male and female births in this database.
     - name: birthweight
@@ -42,7 +42,7 @@
     - name: cowuniqueid
       comment: >-
         The PRIMARY KEY for this table is the unique set of the Canadian ID and the scheme type. In our case
-        all of the identifiers should have 
+        all of the identifiers should have
       type: PRIMARY KEY
       ddl: PRIMARY KEY (cadid, cowschemeid)
       columns:

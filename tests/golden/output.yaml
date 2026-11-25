@@ -19,8 +19,8 @@ database:
         nullable: true
         type: text
       - comment: We clearly identify the scheme from which the cow ID is coming from.
-          It is implied  that this is the Canadian data scheme, but if this data is
-          used in synthesis work  it is important to identify the source.
+          It is implied that this is the Canadian data scheme, but if this data is
+          used in synthesis work it is important to identify the source.
         default: null
         name: cowschemeid
         nullable: true
@@ -36,7 +36,7 @@ database:
         default: null
         name: gender
         nullable: true
-        type: nchar(1)
+        type: char(1)
       - comment: The weight of the cow at birth.
         default: null
         name: birthweight
@@ -78,8 +78,8 @@ database:
       - columns:
         - cadid
         - cowschemeid
-        comment: 'The PRIMARY KEY for this table is the unique set of the Canadian
-          ID and the scheme type. In our case all of the identifiers should have '
+        comment: The PRIMARY KEY for this table is the unique set of the Canadian
+          ID and the scheme type. In our case all of the identifiers should have
         ddl: PRIMARY KEY (cadid, cowschemeid)
         name: cowuniqueid
         references: null
@@ -317,7 +317,7 @@ database:
         default: null
         name: urlmask
         nullable: true
-        type: url
+        type: text
       - comment: The date this entry was created. This field is used for the purposes
           of tracking changes across the database, and supporting reproducibility
           of data and data models, by allowing users to "roll back" or search for
@@ -432,7 +432,7 @@ database:
         default: null
         name: superceedingrecordid
         nullable: true
-        type: UUID7
+        type: uuid
       comment: The primary table for storing records about an individual. We are modeling
         this table after the [schema:Person](https://schema.org/Person) data model
         to some degree, for broader compatibility.
@@ -476,7 +476,7 @@ database:
         default: null
         name: superceedingrecord
         nullable: true
-        type: UUID7
+        type: uuid
       comment: A table for institutions and organizations. This table is modeled after
         the [Research Organization Registry](https://ror.org/) and is intended to
         link to collaboration institutions, manufacturers, suppliers and research
@@ -637,18 +637,18 @@ database:
         default: null
         name: instrumentcolloquialnames
         nullable: true
-        type: text array
+        type: text[]
       - comment: The manufacturer of the product.
         default: null
         name: manufacturerid
         nullable: true
-        type: UUID7
+        type: uuid
       - comment: The organization through which the equipment was purchased (an alias
           for institution id).
         default: null
         name: supplierid
         nullable: true
-        type: UUID7
+        type: uuid
       - comment: The date this entry was created. This field is used for the purposes
           of tracking changes across the database, and supporting reproducibility
           of data and data models, by allowing users to "roll back" or search for
@@ -671,7 +671,7 @@ database:
         default: null
         name: superceedingrecordid
         nullable: true
-        type: UUID7
+        type: uuid
       comment: A table for managing scientific and technical instruments used within
         the research system. This table is intended to help with connecting measurements
         to documentation and workflow management. The design of this table and its
@@ -773,7 +773,7 @@ database:
         default: null
         name: superceedingrecord
         nullable: true
-        type: UUID7
+        type: uuid
       comment: A table for keywords for datasets, publications and other terms. Ideally
         these terms are linked to external resources, such as ontologies or subject
         schema.

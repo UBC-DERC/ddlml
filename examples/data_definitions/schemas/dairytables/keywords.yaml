@@ -13,7 +13,7 @@
   - $ref: columns/datemodified.yaml
   - name: superceedingrecord
     comment: In the case a record is replaced with an alternative record (for example a manufacturer is sold to a new company).
-    type: UUID7
+    type: uuid
   constraints:
   - name: keywordid_pk
     comment: Primary key for the keywords table (expects to be unique)

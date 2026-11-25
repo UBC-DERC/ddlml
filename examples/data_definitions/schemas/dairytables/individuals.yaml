@@ -17,7 +17,7 @@
     - $ref: columns/datemodified.yaml
     - name: superceedingrecordid
       comment: In the case a record is replaced with an alternative record (for example an individual changes their name, but the "old" name remains in the publication list).
-      type: UUID7
+      type: uuid
   constraints:
   - name: individual_pk
     comment: The primary key for the table (comes with indexing as well).
