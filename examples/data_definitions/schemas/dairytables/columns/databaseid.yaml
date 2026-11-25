@@ -1,0 +1,3 @@
+- name: databaseid
+  type: uuid
+  comment: A unique internal identifier for an external database reference.

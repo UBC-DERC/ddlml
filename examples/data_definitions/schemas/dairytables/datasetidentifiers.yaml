@@ -13,7 +13,7 @@
       one of the entries in the `externaldatabases` table, but this may
       be limited to a subset in the future.
   - name: externaldatabaseid
-    type: uuid7
+    type: uuid
     comment: >-
       A pointer to the `externaldatabase` table. It may be worth adding a constraint that the
       `identifier` and the `urlmask` should form a valid URL. In this case we should do some
