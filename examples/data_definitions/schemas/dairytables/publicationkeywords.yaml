@@ -22,9 +22,11 @@
     type: FOREIGN KEY
     columns:
       - keywordid
-    ddl: FOREIGN KEY (keywordid) REFERENCES keywords(keywordid) ON UPDATE CASCADE
+      - sourceid
+    ddl: FOREIGN KEY (keywordid, sourceid) REFERENCES keywords(keywordid, sourceid) ON UPDATE CASCADE
     references:
       table: keywords
       columns:
         - keywordid
+        - sourceid
       on_update: CASCADE
