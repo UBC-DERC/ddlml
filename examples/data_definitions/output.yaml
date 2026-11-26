@@ -304,12 +304,12 @@ database:
         name: url
         nullable: true
         type: url
-      - comment: The url mask is intended to show how the identifers should be used.  The
-          mask will be based on the resource itself. For example, ORCID indicates  that
-          its identifiers should be written as `https://orcid.org/0000-0000-0000-0000`,  in
-          which case the URL mask should be `{identifier}` such that replacing the  identifier
-          produces a valid URL. Thus, for a DOI, where the DOI itself is written `10.0000/0000000`,
-          the mask will be `https://doi.org/{identifier}`.
+      - comment: The url mask is intended to show how the identifers should be used.
+          The mask will be based on the resource itself. For example, ORCID indicates
+          that its identifiers should be written as `https://orcid.org/0000-0000-0000-0000`,
+          in which case the URL mask should be `{identifier}` such that replacing
+          the identifier produces a valid URL. Thus, for a DOI, where the DOI itself
+          is written `10.0000/0000000`, the mask will be `https://doi.org/{identifier}`.
         default: null
         name: urlmask
         nullable: true
@@ -333,9 +333,16 @@ database:
         type: datetime
       comment: A table to manage and record pointers to various external resources.
         These resources include data management tools such as DOIs and ARKs, product
-        identifiers such as UPC codes,  and other external references such as WikiData,
+        identifiers such as UPC codes, and other external references such as WikiData,
         or others.
-      constraints: []
+      constraints:
+      - columns:
+        - databaseid
+        comment: The internal primary key for external database references.
+        ddl: null
+        name: externaldatabases_pk
+        references: null
+        type: PRIMARY KEY
       indexes: []
       name: externaldatabases
       schema: dairy
@@ -777,7 +784,10 @@ database:
       - columns:
         - keywordid
         - sourceid
-        comment: Primary key for the keywords table (expects to be unique)
+        comment: Primary key for the keywords table (expects to be unique). We're
+          making this a composite key so that we can potentially use multiple sources
+          for certain keywords, for example, "reproduction" from animal biology, and
+          from photocopying, or something.
         ddl: PRIMARY KEY(keywordid, sourceid)
         name: keywordid_pk
         references: null
@@ -852,12 +862,15 @@ database:
         type: FOREIGN KEY
       - columns:
         - keywordid
+        - sourceid
         comment: No comment provided.
-        ddl: FOREIGN KEY (keywordid) REFERENCES keywords(keywordid) ON UPDATE CASCADE
+        ddl: FOREIGN KEY (keywordid, sourceid) REFERENCES keywords(keywordid, sourceid)
+          ON UPDATE CASCADE
         name: keyword_fkey
         references:
           columns:
           - keywordid
+          - sourceid
           on_delete: null
           on_update: CASCADE
           schema: dairy
@@ -950,10 +963,25 @@ info:
   - email: dairy@example.com
     name: Dairy Model Team
     url: null
+  description: 'This data model is designed to support the management of dairy farms,
+
+    including tracking of cows, milk production, feed, and other related data.
+
+    The Dairy Model provides a structured schema for storing and querying
+
+    information relevant to dairy farm operations. This example was developed
+
+    in part, to support the development of a more complete data model at the
+
+    University of British Columbia''s Dairy Education and Research Centre
+
+    ([UBC DERC](https://dairycentre.landfood.ubc.ca/)).
+
+    '
   license:
     identifier: null
     name: CC0-1.0
     url: https://creativecommons.org/publicdomain/zero/1.0/
-  summary: A data model for dairy farm management
+  summary: A data model for dairy farm management.
   title: Dairy Model
   version: 1.0.0

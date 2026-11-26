@@ -43,6 +43,14 @@ def _fk(name, references, columns=("id",)):
     )
 
 
+def _pk(name, *columns):
+    return constraint_dict(name=name, type="PRIMARY KEY", columns=list(columns))
+
+
+def _unique(name, *columns):
+    return constraint_dict(name=name, type="UNIQUE", columns=list(columns))
+
+
 def _db(*schemas):
     return DDL_Dict(name="dairymodel", schemas=list(schemas))
 
@@ -105,7 +113,7 @@ def test_valid_fk_resolves():
         schema_dict(
             name="dairy",
             tables=[
-                _table("cows"),
+                _table("cows", constraints=[_pk("cows_pk", "id")]),
                 _table(
                     "calves",
                     constraints=[
@@ -162,7 +170,9 @@ def test_wrong_schema_is_reported():
 
 def test_cross_schema_reference_resolves():
     db = _db(
-        schema_dict(name="dairy", tables=[_table("cows")]),
+        schema_dict(
+            name="dairy", tables=[_table("cows", constraints=[_pk("cows_pk", "id")])]
+        ),
         schema_dict(
             name="apps",
             tables=[
@@ -241,7 +251,11 @@ def test_valid_fk_with_columns_resolves():
         schema_dict(
             name="dairy",
             tables=[
-                table_dict(name="institutions", columns=_cols("institutionid")),
+                table_dict(
+                    name="institutions",
+                    columns=_cols("institutionid"),
+                    constraints=[_pk("institutions_pk", "institutionid")],
+                ),
                 table_dict(
                     name="instruments",
                     columns=_cols("supplierid"),
@@ -261,6 +275,150 @@ def test_valid_fk_with_columns_resolves():
     assert find_missing_references(db) == []
 
 
+def test_valid_fk_with_missing_pk_raises_error():
+    db = _db(
+        schema_dict(
+            name="dairy",
+            tables=[
+                table_dict(
+                    name="institutions",
+                    columns=_cols("institutionid"),
+                    constraints=[],
+                ),
+                table_dict(
+                    name="instruments",
+                    columns=_cols("supplierid"),
+                    constraints=[
+                        _fk(
+                            "fk",
+                            reference_dict(
+                                table="institutions", columns=["institutionid"]
+                            ),
+                            columns=("supplierid",),
+                        )
+                    ],
+                ),
+            ],
+        )
+    )
+    with pytest.raises(ReferenceCheckError) as exc:
+        check_references(db)
+    message = str(exc.value)
+    assert "PRIMARY" in message
+
+
+def test_composite_fk_with_composite_pk_different_order_passes():
+    db = _db(
+        schema_dict(
+            name="dairy",
+            tables=[
+                table_dict(
+                    name="institutions",
+                    columns=_cols("institutionid", "location"),
+                    constraints=[_pk("composite_pk", "institutionid", "location")],
+                ),
+                table_dict(
+                    name="instruments",
+                    columns=_cols("location", "supplierid"),
+                    constraints=[
+                        _fk(
+                            "fk",
+                            reference_dict(
+                                table="institutions",
+                                columns=["location", "institutionid"],
+                            ),
+                            columns=(
+                                "location",
+                                "supplierid",
+                            ),
+                        )
+                    ],
+                ),
+            ],
+        )
+    )
+    assert check_references(db) is db
+
+
+def test_simple_fk_to_unique_passes():
+    db = _db(
+        schema_dict(
+            name="dairy",
+            tables=[
+                table_dict(
+                    name="institutions",
+                    columns=_cols("institutionid", "location"),
+                    constraints=[_unique("location_unique", "location")],
+                ),
+                table_dict(
+                    name="instruments",
+                    columns=_cols("location", "supplierid"),
+                    constraints=[
+                        _fk(
+                            "fk",
+                            reference_dict(table="institutions", columns=["location"]),
+                            columns=("location",),
+                        )
+                    ],
+                ),
+            ],
+        )
+    )
+    assert check_references(db) is db
+
+
+def test_missing_column_reports_one_problem_only():
+    db = _db(
+        schema_dict(
+            name="dairy",
+            tables=[
+                _table("cows", constraints=[_pk("cows_pk", "id")]),
+                _table(
+                    "calves",
+                    constraints=[
+                        _fk("fk", reference_dict(table="cows", columns=["nope"]))
+                    ],
+                ),
+            ],
+        )
+    )
+    problems = find_missing_references(db)
+    assert len(problems) == 1
+    assert "does not exist" in problems[0]
+
+
+def test_simple_fk_with_composite_pk_raises_error():
+    db = _db(
+        schema_dict(
+            name="dairy",
+            tables=[
+                table_dict(
+                    name="institutions",
+                    columns=_cols("institutionid", "location"),
+                    constraints=[_pk("composite_pk", "institutionid", "location")],
+                ),
+                table_dict(
+                    name="instruments",
+                    columns=_cols("supplierid"),
+                    constraints=[
+                        _fk(
+                            "fk",
+                            reference_dict(
+                                table="institutions", columns=["institutionid"]
+                            ),
+                            columns=("supplierid",),
+                        )
+                    ],
+                ),
+            ],
+        )
+    )
+    with pytest.raises(ReferenceCheckError) as exc:
+        check_references(db)
+    message = str(exc.value)
+    assert "PRIMARY" in message
+
+
 def test_self_fk_with_defaults_passes():
     db = _db(
         schema_dict(
@@ -270,11 +428,12 @@ def test_self_fk_with_defaults_passes():
                     name="cows",
                     columns=_cols("cadid"),
                     constraints=[
+                        _pk("cows_pk", "cadid"),
                         _fk(
                             "damfk",
                             reference_dict(table="cows", columns=["cadid"]),
                             columns=("cadid",),
-                        )
+                        ),
                     ],
                 ),
             ],

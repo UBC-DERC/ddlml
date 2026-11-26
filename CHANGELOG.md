@@ -76,6 +76,11 @@ to `ddlml`.
 
 ### Changed
 
+- Foreign keys must reference the target table's primary key or a `UNIQUE`
+  constraint, with the same set of columns (order doesn't matter). Models that
+  reference other columns now fail validation. The example model gained a
+  primary key on `externaldatabases` and a composite foreign key from
+  `publicationkeywords` to `keywords`.
 - **Breaking: renamed from `data_model` / DDAML to `ddlml`.** "DDAML" is already the name
   of another markup language. This covers:
   - the package on PyPI (`data-model` → `ddlml`) and the import (`data_model` → `ddlml`);
