@@ -86,6 +86,8 @@ def find_missing_references(db: DDL_Dict) -> list[str]:
                 ref = constraint.references
                 if ref is None:
                     continue
+                if ref.schema_ is None or ref.table is None:
+                    continue
                 target = (ref.schema_, ref.table)
                 if target not in columns_by_table:
                     problems.append(
