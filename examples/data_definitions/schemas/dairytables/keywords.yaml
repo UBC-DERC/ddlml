@@ -16,7 +16,10 @@
     type: uuid
   constraints:
   - name: keywordid_pk
-    comment: Primary key for the keywords table (expects to be unique)
+    comment: >-
+      Primary key for the keywords table (expects to be unique). We're making this a composite key
+      so that we can potentially use multiple sources for certain keywords, for example, "reproduction"
+      from animal biology, and from photocopying, or something.
     type: PRIMARY KEY
     ddl: PRIMARY KEY(keywordid, sourceid)
     columns:

@@ -17,7 +17,13 @@ run reports the complete list of unresolved references rather than stopping at
 the first one.
 """
 
-from .object_classes import DDL_Dict
+from .object_classes import ConstraintType, DDL_Dict
+
+CONSTRAINT_KEYS = {
+    ConstraintType.primary_key,
+    ConstraintType.unique,
+    ConstraintType.unique_nulls_not_distinct,
+}
 
 
 class ReferenceCheckError(Exception):
@@ -65,8 +71,18 @@ def find_missing_references(db: DDL_Dict) -> list[str]:
     """
     resolve_references(db)
 
+    # Get all the column names in each table.
     columns_by_table = {
         (schema.name, table.name): {col.name for col in table.columns}
+        for schema in db.schemas
+        for table in schema.tables
+    }
+
+    # Get all the constraints in an unordered set, so we can match from foreign keys.
+    keys_by_table = {
+        (schema.name, table.name): {
+            frozenset(c.columns) for c in table.constraints if c.type in CONSTRAINT_KEYS
+        }
         for schema in db.schemas
         for table in schema.tables
     }
@@ -86,6 +102,8 @@ def find_missing_references(db: DDL_Dict) -> list[str]:
                 ref = constraint.references
                 if ref is None:
                     continue
+                if ref.schema_ is None or ref.table is None:
+                    continue
                 target = (ref.schema_, ref.table)
                 if target not in columns_by_table:
                     problems.append(
@@ -93,19 +111,21 @@ def find_missing_references(db: DDL_Dict) -> list[str]:
                         f"missing table '{ref.schema_}.{ref.table}'"
                     )
                     continue
-                target_columns = columns_by_table.get(target)
-                for col in ref.columns:
-                    if target_columns is None:
-                        problems.append(
-                            f"{source} constraint '{constraint.name}' references "
-                            f"missing table '{ref.schema_}.{ref.table}'"
-                        )
-                    elif col not in target_columns:
-                        problems.append(
-                            f"{source} constraint '{constraint.name}' references "
-                            f"column '{col}', which does not exist in "
-                            f"'{ref.schema_}.{ref.table}'"
-                        )
+                target_columns = columns_by_table[target]
+                missing = [c for c in ref.columns if c not in target_columns]
+                for col in missing:
+                    problems.append(
+                        f"{source} constraint '{constraint.name}' references "
+                        f"column '{col}', which does not exist in "
+                        f"'{ref.schema_}.{ref.table}'"
+                    )
+                if not missing and frozenset(ref.columns) not in keys_by_table[target]:
+                    problems.append(
+                        f"{source} constraint '{constraint.name}' references "
+                        f"({', '.join(ref.columns)}) in '{ref.schema_}.{ref.table}', "
+                        "which is not its PRIMARY KEY or a UNIQUE constraint"
+                    )
+
     return problems
 
 
@@ -127,6 +147,6 @@ def check_references(db: DDL_Dict) -> DDL_Dict:
     problems = find_missing_references(db)
     if problems:
         raise ReferenceCheckError(
-            "Unresolved references found:\n  - " + "\n  - ".join(problems)
+            "Reference problems have been found:\n  - " + "\n  - ".join(problems)
         )
     return db

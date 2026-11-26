@@ -25,3 +25,9 @@
         `https://doi.org/{identifier}`.
     - $ref: columns/datecreated.yaml
     - $ref: columns/datemodified.yaml
+  constraints:
+  - name: externaldatabases_pk
+    type: PRIMARY KEY
+    comment: The internal primary key for external database references.
+    columns:
+    - databaseid

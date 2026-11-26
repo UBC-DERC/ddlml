@@ -337,7 +337,14 @@ database:
         These resources include data management tools such as DOIs and ARKs, product
         identifiers such as UPC codes, and other external references such as WikiData,
         or others.
-      constraints: []
+      constraints:
+      - columns:
+        - databaseid
+        comment: The internal primary key for external database references.
+        ddl: null
+        name: externaldatabases_pk
+        references: null
+        type: PRIMARY KEY
       indexes: []
       name: externaldatabases
       schema: dairy
@@ -779,7 +786,10 @@ database:
       - columns:
         - keywordid
         - sourceid
-        comment: Primary key for the keywords table (expects to be unique)
+        comment: Primary key for the keywords table (expects to be unique). We're
+          making this a composite key so that we can potentially use multiple sources
+          for certain keywords, for example, "reproduction" from animal biology, and
+          from photocopying, or something.
         ddl: PRIMARY KEY(keywordid, sourceid)
         name: keywordid_pk
         references: null
@@ -854,12 +864,15 @@ database:
         type: FOREIGN KEY
       - columns:
         - keywordid
+        - sourceid
         comment: No comment provided.
-        ddl: FOREIGN KEY (keywordid) REFERENCES keywords(keywordid) ON UPDATE CASCADE
+        ddl: FOREIGN KEY (keywordid, sourceid) REFERENCES keywords(keywordid, sourceid)
+          ON UPDATE CASCADE
         name: keyword_fkey
         references:
           columns:
           - keywordid
+          - sourceid
           on_delete: null
           on_update: CASCADE
           schema: dairy
